@@ -1,6 +1,6 @@
 package de.abq.partium.common.item;
 
-import de.abq.partium.client.renderer.ToolRenderer;
+import de.abq.partium.client.renderer.SwordRenderer;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -37,12 +37,12 @@ public class PartiumSwordItem extends PickaxeItem implements GeoItem {
     @Override
     public void createGeoRenderer(Consumer<GeoRenderProvider> consumer) {
         consumer.accept(new GeoRenderProvider() {
-            private ToolRenderer renderer;
+            private SwordRenderer renderer;
 
             @Override
             public BlockEntityWithoutLevelRenderer getGeoItemRenderer() {
                 if (this.renderer == null)
-                    this.renderer = new ToolRenderer();
+                    this.renderer = new SwordRenderer();
                 return this.renderer;
             }
         });

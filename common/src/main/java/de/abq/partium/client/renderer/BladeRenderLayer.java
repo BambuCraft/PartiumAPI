@@ -31,7 +31,7 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
     private int primaryInnerColor = -1;
     private int primaryOuterColor = -1;
 
-    public BladeRenderLayer(ToolRenderer entityRendererIn) {
+    public BladeRenderLayer(SwordRenderer entityRendererIn) {
         super(entityRendererIn);
         this.emitterLocation = new Vector3f();
     }

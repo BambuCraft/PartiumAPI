@@ -5,7 +5,7 @@ import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.model.GeoModel;
 
 public class DynamicItemModel<T extends GeoAnimatable> extends GeoModel<T> {
-    public ResourceLocation resourceLocation;
+    private ResourceLocation resourceLocation;
     public DynamicItemModel(ResourceLocation resourceLocation) {
         this.resourceLocation = resourceLocation;
     }

@@ -82,7 +82,7 @@ public class ModelRenderLayer<T extends GeoAnimatable> extends AutoGlowingGeoLay
     }
 
     private void sendBladeJoints(Vector3f emitter, GeoBone bladeBone){
-        ToolRenderer swordRenderer = ((ToolRenderer) this.getRenderer());
+        SwordRenderer swordRenderer = ((SwordRenderer) this.getRenderer());
         swordRenderer.setBladeEmitterLocation( emitter );
         for (GeoBone emitterBone : bladeBone.getChildBones()) {
             swordRenderer.pushBladeJointsChecked(emitterBone);

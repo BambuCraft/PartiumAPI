@@ -23,8 +23,10 @@ import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.model.DefaultedItemGeoModel;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
 
+import java.util.Optional;
+
 //TODO: Only works for sword item
-public class ToolRenderer extends GeoItemRenderer<PartiumSwordItem> {
+public class SwordRenderer extends GeoItemRenderer<PartiumSwordItem> {
     private final BladeRenderLayer bladeRenderLayer = new BladeRenderLayer(this);
     private final ModelRenderLayer<PartiumSwordItem> emitterRenderLayer = new ModelRenderLayer<>(this, "emitter");
     private final ModelRenderLayer<PartiumSwordItem> pommelRenderLayer = new ModelRenderLayer<>(this, "pommel");
@@ -36,7 +38,7 @@ public class ToolRenderer extends GeoItemRenderer<PartiumSwordItem> {
     private boolean isGUIRendered = false;
     private boolean isFixed = false;
 
-    public ToolRenderer() {
+    public SwordRenderer() {
         super(new DefaultedItemGeoModel<>(Partium.path("base")));
         addRenderLayer(emitterRenderLayer);
         addRenderLayer(guardRenderLayer);
@@ -73,12 +75,16 @@ public class ToolRenderer extends GeoItemRenderer<PartiumSwordItem> {
                     BakedGeoModel rootModel = model.getBakedModel(this.model.getModelResource((PartiumSwordItem) stack.getItem()));
                     this.gripChange = false;
                     this.gripModel.getBone("bb_main").ifPresent(gripBone -> {
-                        GeoBone rootBone = rootModel.getBone("root").get();
+                        Optional<GeoBone> rootBone = rootModel.getBone("root");
+                        if (rootBone.isEmpty()) {
+                            Partium.LOG.info("No root bone found in {}", this.animatable);
+                            return;
+                        }
 
                         gripBone.updatePosition(
-                                rootBone.getPosX()-8,
-                                rootBone.getPosY()+8,
-                                rootBone.getPosZ()+8.5f
+                                rootBone.get().getPosX()-8,
+                                rootBone.get().getPosY()+8,
+                                rootBone.get().getPosZ()+8.5f
                         );
                         gripBone.markPositionAsChanged();
                     });

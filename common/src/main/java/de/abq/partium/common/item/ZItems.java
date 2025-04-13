@@ -18,6 +18,8 @@ public class ZItems {
     private static final Item.Properties DEFAULT_PROPERTIES = Services.PLATFORM.defaultItemBuilder().rarity(Rarity.EPIC).stacksTo(1).component(ELDataComponents.SWORD_PARTS, PartsComponents.DEFAULT);
 
     public static final Item SWORD = build("sword", new PartiumSwordItem(Tiers.NETHERITE, DEFAULT_PROPERTIES));
+
+    // Not Working
     public static final Item PICKAXE = build("pickaxe", new PartiumPickaxeItem(Tiers.NETHERITE, DEFAULT_PROPERTIES));
     public static final Item AXE = build("axe", new PartiumAxeItem(Tiers.NETHERITE, DEFAULT_PROPERTIES));
     public static final Item HOE = build("hoe", new PartiumHoeItem(Tiers.NETHERITE, DEFAULT_PROPERTIES));
