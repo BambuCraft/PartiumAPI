@@ -18,7 +18,7 @@ All branches with a version number should be buildable, the wip branch will have
 ### How to use:
 The following command should explain everything there is to know, colors are in the hex format and blades can have an optional model. If a model is provided it will not render a lightsaber blade.
 Specifying a color when using a blade model is currently unimplemented. 
-Further knowladge can be obtained in the (wiki)[https://github.com/BambuCraft/PartiumAPI/wiki]
+Further knowladge can be obtained in the [wiki](https://github.com/BambuCraft/PartiumAPI/wiki)
 
 ```jsonc
 /give @p partium:sword[
