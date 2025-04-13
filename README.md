@@ -47,8 +47,8 @@ Specifying a color when using a blade model is currently unimplemented.
 	}
 }]
 
-;; eg.
 
+//Test components contained in the mod
 /give @p partium:sword[partium:parts={
 "grip":{"model":"partium:test_grip"},
 "pommel":{"model":"partium:test_pommel", "scale":0.75f},
