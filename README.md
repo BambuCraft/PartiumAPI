@@ -16,7 +16,7 @@ You can also add your own Models, Texture and Animations.
 The following command should explain everything there is to know, colors are in the hex format and blades can have an optional model. If a model is provided it will not render a lightsaber blade.
 Specifying a color when using a blade model is currently unimplemented.
 
-```json
+```jsonc
 /give @p partium:sword[
 	partium:parts = {
 	"blades":[
