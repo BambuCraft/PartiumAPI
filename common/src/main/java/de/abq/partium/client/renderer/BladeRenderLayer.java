@@ -38,18 +38,20 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
 
     @Override
     public void renderForBone(PoseStack poseStack, PartiumSwordItem animatable, GeoBone bone, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
-        if (shouldRender && blades != null)
-         for (GeoBone blade_joint : this.bones ){
+        if (!shouldRender || blades == null) return;
+        for (GeoBone blade_joint : this.bones) {
             Optional<BladesPart.Blade> bladeDataOpt = blades.getByString(blade_joint.getName());
             if (bladeDataOpt.isEmpty()) continue;
             BladesPart.Blade bladeData = bladeDataOpt.get();
             isBladeFineCut = bladeData.fine_cut();
             isBladeCracked = bladeData.cracked();
 
-            if (primaryInnerColor == -1 && blade_joint.getName().equals("primary")) primaryInnerColor = Util.HexStringToIntARGB(bladeData.innerColor());
-            if (primaryOuterColor == -1 && blade_joint.getName().equals("primary")) primaryOuterColor = Util.HexStringToIntARGB(bladeData.outerColor());
+            if (primaryInnerColor == -1 && blade_joint.getName().equals("primary"))
+                primaryInnerColor = Util.HexStringToIntARGB(bladeData.innerColor());
+            if (primaryOuterColor == -1 && blade_joint.getName().equals("primary"))
+                primaryOuterColor = Util.HexStringToIntARGB(bladeData.outerColor());
 
-            if (bladeData.model().getPath().isBlank() || bladeData.model().getNamespace().isBlank()){
+            if (bladeData.model().getPath().isBlank() || bladeData.model().getNamespace().isBlank()) {
                 Tuple<MultiBufferSource, PoseStack> blade = renderLightsaberBlade(bufferSource, poseStack, blade_joint, bladeData.length() * 2, Util.HexStringToIntARGB(bladeData.outerColor(), 0x88), Util.HexStringToIntARGB(bladeData.innerColor(), 0xff));
                 bufferSource = blade.getA();
                 poseStack = blade.getB();
@@ -60,6 +62,7 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
         }
         setBones(new ArrayList<>());
         super.renderForBone(poseStack, animatable, bone, renderType, bufferSource, buffer, partialTick, packedLight, packedOverlay);
+
     }
 
     private Tuple<MultiBufferSource, PoseStack> renderLightsaberBlade(MultiBufferSource bufferSource, PoseStack poseStack, GeoBone blade_joint, float completeBladeLength, int outerColor, int innerColor){
