@@ -12,9 +12,13 @@ You can also add your own Models, Texture and Animations.
 2. [Dependencies](#requirments)
 3. [Why?](#why)
 
+### Repo strucure
+All branches with a version number should be buildable, the wip branch will have the latest changes, but there is no guarantie it will compile.
+
 ### How to use:
 The following command should explain everything there is to know, colors are in the hex format and blades can have an optional model. If a model is provided it will not render a lightsaber blade.
-Specifying a color when using a blade model is currently unimplemented.
+Specifying a color when using a blade model is currently unimplemented. 
+Further knowladge can be obtained in the [wiki](#how-to-use)
 
 ```jsonc
 /give @p partium:sword[
