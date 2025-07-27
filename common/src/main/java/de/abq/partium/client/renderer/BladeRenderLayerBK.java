@@ -1,28 +1,28 @@
 package de.abq.partium.client.renderer;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import de.abq.partium.Partium;
 import de.abq.partium.common.data_components.parts.BladesPart;
 import de.abq.partium.common.item.PartiumSwordItem;
-import de.abq.partium.render_type.ZRenderTypes;
 import de.abq.partium.util.Util;
-import foundry.veil.api.client.render.VeilRenderSystem;
-import foundry.veil.api.client.render.shader.program.ShaderProgram;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Tuple;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import software.bernie.geckolib.cache.object.*;
+import software.bernie.geckolib.cache.object.GeoBone;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 
-public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
+public class BladeRenderLayerBK extends ModelRenderLayer<PartiumSwordItem>{
     private BladesPart blades = null;
     private List<GeoBone> bones = new ArrayList<>();
     private Vector3f emitterLocation;
@@ -34,7 +34,7 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
     private int primaryInnerColor = -1;
     private int primaryOuterColor = -1;
 
-    public BladeRenderLayer(SwordRenderer entityRendererIn) {
+    public BladeRenderLayerBK(SwordRenderer entityRendererIn) {
         super(entityRendererIn);
         this.emitterLocation = new Vector3f();
     }
@@ -55,8 +55,7 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
                 primaryOuterColor = Util.HexStringToIntARGB(bladeData.outerColor());
 
             if (bladeData.model().getPath().isBlank() || bladeData.model().getNamespace().isBlank()) {
-                Tuple<MultiBufferSource, PoseStack> blade = renderLightsaberBlade(animatable, poseStack, bufferSource, blade_joint, bladeData.length() * 2, Util.HexStringToIntARGB(bladeData.outerColor(), 0x88), Util.HexStringToIntARGB(bladeData.innerColor(), 0xff));
-                if (blade == null) return;
+                Tuple<MultiBufferSource, PoseStack> blade = renderLightsaberBlade(bufferSource, poseStack, blade_joint, bladeData.length() * 2, Util.HexStringToIntARGB(bladeData.outerColor(), 0x88), Util.HexStringToIntARGB(bladeData.innerColor(), 0xff));
                 bufferSource = blade.getA();
                 poseStack = blade.getB();
             } else {
@@ -66,23 +65,10 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
         }
         setBones(new ArrayList<>());
         super.renderForBone(poseStack, animatable, bone, renderType, bufferSource, buffer, partialTick, packedLight, packedOverlay);
+
     }
 
-    @Nullable
-    private Tuple<MultiBufferSource, PoseStack> renderLightsaberBlade(PartiumSwordItem animatable, PoseStack poseStack, MultiBufferSource bufferSource, GeoBone blade_joint, float completeBladeLength, int outerColor, int innerColor){
-
-        RenderType renderType = ZRenderTypes.lightsaber_blade();
-        if (renderType == null) {
-            Partium.LOG.error("RenderType == null");
-            return null;
-        }
-        renderType.setupRenderState();
-        ShaderProgram shader = VeilRenderSystem.getShader();
-        if (shader == null) {
-            Partium.LOG.error("shader == null\n\t {}",renderType);
-            renderType.clearRenderState();
-        }
-
+    private Tuple<MultiBufferSource, PoseStack> renderLightsaberBlade(MultiBufferSource bufferSource, PoseStack poseStack, GeoBone blade_joint, float completeBladeLength, int outerColor, int innerColor){
         poseStack.pushPose();
         poseStack.translate(
                 (this.emitterLocation.x+blade_joint.getPivotX())/(16+this.parentScale*0.8f),
@@ -115,9 +101,16 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
         }
         float bladeHeight = completeBladeLength - tip_length;
 
-        shader.bind();
-        /*VertexConsumer outerBuffer = bufferSource.getBuffer(renderType);
+        RenderSystem.enableBlend();
 
+        /* TODO: Implement blade using Veil
+        Optional<ShaderInstance> shaderInstanceOpt = Services.PLATFORM.loaderShaderInstance(
+                ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID,"lightsaber"), VertexFormat.builder().build());
+        shaderInstanceOpt.ifPresent(shaderInstance -> RenderSystem.setShader(() -> shaderInstance));*/
+
+        //Outer Blade
+        VertexConsumer outerBuffer = bufferSource.getBuffer(RenderType.entityTranslucentEmissive(ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "textures/misc/lightsaber_blade_glow.png")));
+        // Front face
         outerBuffer.addVertex(matrix, -outer_blade_thickness, (bladeHeight + 0.01f), outer_blade_length).setColor(outerColor).setUv(u + 0.5f, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f, 1f, 1f);
         outerBuffer.addVertex(matrix, outer_blade_thickness, (bladeHeight + 0.01f), outer_blade_length).setColor(outerColor).setUv(u + 1.0f, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f, 1f, 1f);
         outerBuffer.addVertex(matrix, outer_blade_thickness, -0.5f, outer_blade_length).setColor(outerColor).setUv(u + 1.0f, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f, 1f, 1f);
@@ -141,6 +134,18 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
         outerBuffer.addVertex(matrix, outer_blade_thickness, -0.51f, -outer_blade_length).setColor(outerColor).setUv(u + 1.0f, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f,1f,1f);
         outerBuffer.addVertex(matrix, outer_blade_thickness, -0.51f, outer_blade_length).setColor(outerColor).setUv(u, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f,1f,1f);
 
+        /* // Top face
+        outerBuffer.addVertex(matrix, -outer_blade_length, (bladeHeight + 0.01f), outer_blade_length).setColor(outerColor).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f,1f,1f);
+        outerBuffer.addVertex(matrix, outer_blade_thickness, (bladeHeight + 0.01f), outer_blade_length).setColor(outerColor).setUv(u + 1.0f, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f,1f,1f);
+        outerBuffer.addVertex(matrix, outer_blade_thickness, (bladeHeight + 0.01f), -outer_blade_length).setColor(outerColor).setUv(u + 1.0f, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f,1f,1f);
+        outerBuffer.addVertex(matrix, -outer_blade_length, (bladeHeight + 0.01f), -outer_blade_length).setColor(outerColor).setUv(u, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f,1f,1f);
+
+        // Bottom face
+        outerBuffer.addVertex(matrix, -outer_blade_length, -0.51f, -outer_blade_length).setColor(outerColor).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f,1f,1f);
+        outerBuffer.addVertex(matrix, outer_blade_thickness, -0.51f, -outer_blade_length).setColor(outerColor).setUv(u + 1.0f, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f,1f,1f);
+        outerBuffer.addVertex(matrix, outer_blade_thickness, -0.51f, outer_blade_length).setColor(outerColor).setUv(u + 1.0f, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f,1f,1f);
+        outerBuffer.addVertex(matrix, -outer_blade_length, -0.5f, outer_blade_length).setColor(outerColor).setUv(u, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f,1f,1f);
+*/
         //Tip front
         outerBuffer.addVertex(matrix, 0f, bladeHeight + tip_length+0.75f, 0f).setColor(outerColor).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f,1f,1f);
         outerBuffer.addVertex(matrix, outer_blade_thickness, bladeHeight, outer_blade_length).setColor(outerColor).setUv(u + 1.0f, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f,1f,1f);
@@ -158,11 +163,17 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
         outerBuffer.addVertex(matrix, outer_blade_thickness, bladeHeight, outer_blade_length).setColor(outerColor).setUv(u + 1.0f, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f,1f,1f);
         outerBuffer.addVertex(matrix, -outer_blade_length, bladeHeight, -outer_blade_length).setColor(outerColor).setUv(u, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f,1f,1f);
 
-*/
+
         //Inner Blade
 
-        BufferBuilder innerBuffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+        VertexConsumer innerBuffer = bufferSource.getBuffer(RenderType.entityTranslucentEmissive(ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "textures/misc/lightsaber_blade.png"), false));
         // Bottom square
+        /*
+        innerBuffer.addVertex(matrix, -inner_blade_thickness, -0.5f, -inner_blade_length).setColor(innerColor).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f, 1f, 1f);
+        innerBuffer.addVertex(matrix, inner_blade_thickness, -0.5f, -inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f, 1f, 1f);
+        innerBuffer.addVertex(matrix, inner_blade_thickness, -0.5f, inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f, 1f, 1f);
+        innerBuffer.addVertex(matrix, -inner_blade_thickness, -0.5f, inner_blade_length).setColor(innerColor).setUv(u, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f, 1f, 1f);
+*/
         // Front face
         innerBuffer.addVertex(matrix, -inner_blade_thickness, bladeHeight, inner_blade_length).setColor(innerColor).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f, 1f, 1f);
         innerBuffer.addVertex(matrix, inner_blade_thickness, bladeHeight, inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f, 1f, 1f);
@@ -186,7 +197,13 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
         innerBuffer.addVertex(matrix, inner_blade_thickness, bladeHeight, -inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f, 1f, 1f);
         innerBuffer.addVertex(matrix, inner_blade_thickness, -0.5f, -inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f, 1f, 1f);
         innerBuffer.addVertex(matrix, inner_blade_thickness, -0.5f, inner_blade_length).setColor(innerColor).setUv(u, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f, 1f, 1f);
-
+/*
+        // Top face
+        innerBuffer.addVertex(matrix, -inner_blade_thickness, bladeHeight, inner_blade_length).setColor(innerColor).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f, 1f, 1f);
+        innerBuffer.addVertex(matrix, inner_blade_thickness, bladeHeight, inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f, 1f, 1f);
+        innerBuffer.addVertex(matrix, inner_blade_thickness, bladeHeight, -inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f, 1f, 1f);
+        innerBuffer.addVertex(matrix, -inner_blade_thickness, bladeHeight, -inner_blade_length).setColor(innerColor).setUv(u, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f, 1f, 1f);
+*/
         //Tip front
         innerBuffer.addVertex(matrix, 0f, bladeHeight + tip_length, 0f).setColor(innerColor).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f, 1f, 1f);
         innerBuffer.addVertex(matrix, inner_blade_thickness, bladeHeight, inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f, 1f, 1f);
@@ -204,8 +221,6 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
         innerBuffer.addVertex(matrix, inner_blade_thickness, bladeHeight, inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f, 1f, 1f);
         innerBuffer.addVertex(matrix, -inner_blade_thickness, bladeHeight, -inner_blade_length).setColor(innerColor).setUv(u, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f, 1f, 1f);
 
-        //renderType.clearRenderState();
-        ShaderProgram.unbind();
         poseStack.popPose();
         return new Tuple<>(bufferSource, poseStack);
     }

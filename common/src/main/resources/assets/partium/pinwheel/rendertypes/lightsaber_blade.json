@@ -1,0 +1,14 @@
+{
+  "format": "POSITION_COLOR",
+  "mode": "QUADS",
+  "bufferSize": "TRANSIENT",
+  "sort": false,
+  "affectsCrumbling": true,
+  "outline": false,
+  "layers": [
+    {
+      "type": "veil:shader",
+      "name": "partium:lightsaber_blade"
+    }
+  ]
+}

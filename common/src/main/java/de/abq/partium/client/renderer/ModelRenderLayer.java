@@ -15,12 +15,13 @@ import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
+import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 import software.bernie.geckolib.util.Color;
 
 import java.util.Objects;
 import java.util.Optional;
 
-public class ModelRenderLayer<T extends GeoAnimatable> extends AutoGlowingGeoLayer<T> {
+public class ModelRenderLayer<T extends GeoAnimatable> extends GeoRenderLayer<T> {
     private ResourceLocation model;
     private float scale;
     protected float parentScale;

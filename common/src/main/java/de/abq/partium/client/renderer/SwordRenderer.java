@@ -25,7 +25,6 @@ import software.bernie.geckolib.renderer.GeoItemRenderer;
 
 import java.util.Optional;
 
-//TODO: Only works for sword item
 public class SwordRenderer extends GeoItemRenderer<PartiumSwordItem> {
     private final BladeRenderLayer bladeRenderLayer = new BladeRenderLayer(this);
     private final ModelRenderLayer<PartiumSwordItem> emitterRenderLayer = new ModelRenderLayer<>(this, "emitter");
@@ -59,84 +58,85 @@ public class SwordRenderer extends GeoItemRenderer<PartiumSwordItem> {
 
             if (renderType == null) {
                 Partium.LOG.warn("renderType == null");
+                return;
             }
             if (parts == null) {
                 Partium.LOG.warn("parts == null");
-            } else {
-                BladesPart bladesData = parts.blades();
-                ModelPart emitterData = parts.emitter();
-                ModelPart guardData = parts.guard();
-                ModelPart gripData = parts.grip();
-                ModelPart pommelData = parts.pommel();
+                return;
+            }
+            BladesPart bladesData = parts.blades();
+            ModelPart emitterData = parts.emitter();
+            ModelPart guardData = parts.guard();
+            ModelPart gripData = parts.grip();
+            ModelPart pommelData = parts.pommel();
 
-                DynamicItemModel<PartiumSwordItem> localGripModel = new DynamicItemModel<>(gripData.model());
-                if ( CheckedResourceLocation.exists(localGripModel.getModelResource(animatable))) {
-                    this.gripModel = localGripModel.getBakedModel(localGripModel.getModelResource(animatable));
-                    BakedGeoModel rootModel = model.getBakedModel(this.model.getModelResource((PartiumSwordItem) stack.getItem()));
-                    this.gripChange = false;
-                    this.gripModel.getBone("bb_main").ifPresent(gripBone -> {
-                        Optional<GeoBone> rootBone = rootModel.getBone("root");
-                        if (rootBone.isEmpty()) {
-                            Partium.LOG.info("No root bone found in {}", this.animatable);
-                            return;
-                        }
+            DynamicItemModel<PartiumSwordItem> localGripModel = new DynamicItemModel<>(gripData.model());
+            if ( CheckedResourceLocation.exists(localGripModel.getModelResource(animatable))) {
+                this.gripModel = localGripModel.getBakedModel(localGripModel.getModelResource(animatable));
+                BakedGeoModel rootModel = model.getBakedModel(this.model.getModelResource((PartiumSwordItem) stack.getItem()));
+                this.gripChange = false;
+                this.gripModel.getBone("bb_main").ifPresent(gripBone -> {
+                    Optional<GeoBone> rootBone = rootModel.getBone("root");
+                    if (rootBone.isEmpty()) {
+                        Partium.LOG.info("No root bone found in {}", this.animatable);
+                        return;
+                    }
 
-                        gripBone.updatePosition(
-                                rootBone.get().getPosX()-8,
-                                rootBone.get().getPosY()+8,
-                                rootBone.get().getPosZ()+8.5f
-                        );
-                        gripBone.markPositionAsChanged();
-                    });
+                    gripBone.updatePosition(
+                            rootBone.get().getPosX()-8,
+                            rootBone.get().getPosY()+8,
+                            rootBone.get().getPosZ()+8.5f
+                    );
+                    gripBone.markPositionAsChanged();
+                });
 
-                    model.getBone("joint_emitter").get().setPivotX(this.gripModel.getBone("joint_emitter").get().getPivotX() + .13f);
-                    model.getBone("joint_emitter").get().setPivotY(this.gripModel.getBone("joint_emitter").get().getPivotY() - .13f);
-                    model.getBone("joint_emitter").get().setPivotZ(this.gripModel.getBone("joint_emitter").get().getPivotZ() + .5f);
+                model.getBone("joint_emitter").get().setPivotX(this.gripModel.getBone("joint_emitter").get().getPivotX() + .13f);
+                model.getBone("joint_emitter").get().setPivotY(this.gripModel.getBone("joint_emitter").get().getPivotY() - .13f);
+                model.getBone("joint_emitter").get().setPivotZ(this.gripModel.getBone("joint_emitter").get().getPivotZ() + .5f);
 
-                    model.getBone("joint_guard").get().setPivotX(this.gripModel.getBone("joint_guard").get().getPivotX() + .13f);
-                    model.getBone("joint_guard").get().setPivotY(this.gripModel.getBone("joint_guard").get().getPivotY() - .13f);
-                    model.getBone("joint_guard").get().setPivotZ(this.gripModel.getBone("joint_guard").get().getPivotZ() + .5f);
+                model.getBone("joint_guard").get().setPivotX(this.gripModel.getBone("joint_guard").get().getPivotX() + .13f);
+                model.getBone("joint_guard").get().setPivotY(this.gripModel.getBone("joint_guard").get().getPivotY() - .13f);
+                model.getBone("joint_guard").get().setPivotZ(this.gripModel.getBone("joint_guard").get().getPivotZ() + .5f);
 
-                    model.getBone("joint_pommel").get().setPivotX(this.gripModel.getBone("joint_pommel").get().getPivotX() + .13f);
-                    model.getBone("joint_pommel").get().setPivotY(this.gripModel.getBone("joint_pommel").get().getPivotY() - .13f);
-                    model.getBone("joint_pommel").get().setPivotZ(this.gripModel.getBone("joint_pommel").get().getPivotZ() + .5f);
+                model.getBone("joint_pommel").get().setPivotX(this.gripModel.getBone("joint_pommel").get().getPivotX() + .13f);
+                model.getBone("joint_pommel").get().setPivotY(this.gripModel.getBone("joint_pommel").get().getPivotY() - .13f);
+                model.getBone("joint_pommel").get().setPivotZ(this.gripModel.getBone("joint_pommel").get().getPivotZ() + .5f);
 
-                    model.getBone("joint_emitter").get().setRotX(this.gripModel.getBone("joint_emitter").get().getRotX());
-                    model.getBone("joint_emitter").get().setRotY(this.gripModel.getBone("joint_emitter").get().getRotY());
-                    model.getBone("joint_emitter").get().setRotZ(this.gripModel.getBone("joint_emitter").get().getRotZ());
+                model.getBone("joint_emitter").get().setRotX(this.gripModel.getBone("joint_emitter").get().getRotX());
+                model.getBone("joint_emitter").get().setRotY(this.gripModel.getBone("joint_emitter").get().getRotY());
+                model.getBone("joint_emitter").get().setRotZ(this.gripModel.getBone("joint_emitter").get().getRotZ());
 
-                    model.getBone("joint_guard").get().setRotX(this.gripModel.getBone("joint_guard").get().getRotX());
-                    model.getBone("joint_guard").get().setRotY(this.gripModel.getBone("joint_guard").get().getRotY());
-                    model.getBone("joint_guard").get().setRotZ(this.gripModel.getBone("joint_guard").get().getRotZ());
+                model.getBone("joint_guard").get().setRotX(this.gripModel.getBone("joint_guard").get().getRotX());
+                model.getBone("joint_guard").get().setRotY(this.gripModel.getBone("joint_guard").get().getRotY());
+                model.getBone("joint_guard").get().setRotZ(this.gripModel.getBone("joint_guard").get().getRotZ());
 
-                    model.getBone("joint_pommel").get().setRotX(this.gripModel.getBone("joint_pommel").get().getRotX());
-                    model.getBone("joint_pommel").get().setRotY(this.gripModel.getBone("joint_pommel").get().getRotY());
-                    model.getBone("joint_pommel").get().setRotZ(this.gripModel.getBone("joint_pommel").get().getRotZ());
-                }
+                model.getBone("joint_pommel").get().setRotX(this.gripModel.getBone("joint_pommel").get().getRotX());
+                model.getBone("joint_pommel").get().setRotY(this.gripModel.getBone("joint_pommel").get().getRotY());
+                model.getBone("joint_pommel").get().setRotZ(this.gripModel.getBone("joint_pommel").get().getRotZ());
+            }
 
-                if (this.bladeRenderLayer.getBlades() != bladesData) {
-                    this.bladeRenderLayer.setBlades(bladesData);
-                }
-                if (shouldRender(emitterData.model(), this.emitterRenderLayer.getModel())) {
-                    this.emitterRenderLayer.setModel(emitterData.model());
-                    this.emitterRenderLayer.setScale(emitterData.scale());
-                    this.emitterRenderLayer.setRetry(true);
-                }
-                if (shouldRender(guardData.model(), this.guardRenderLayer.getModel())) {
-                    this.guardRenderLayer.setModel(guardData.model());
-                    this.guardRenderLayer.setScale(guardData.scale());
-                    this.guardRenderLayer.setRetry(true);
-                }
-                if (shouldRender(pommelData.model(), this.pommelRenderLayer.getModel())) {
-                    this.pommelRenderLayer.setModel(pommelData.model());
-                    this.pommelRenderLayer.setScale(pommelData.scale());
-                    this.pommelRenderLayer.setRetry(true);
-                }
+            if (this.bladeRenderLayer.getBlades() != bladesData) {
+                this.bladeRenderLayer.setBlades(bladesData);
+            }
+            if (shouldRender(emitterData.model(), this.emitterRenderLayer.getModel())) {
+                this.emitterRenderLayer.setModel(emitterData.model());
+                this.emitterRenderLayer.setScale(emitterData.scale());
+                this.emitterRenderLayer.setRetry(true);
+            }
+            if (shouldRender(guardData.model(), this.guardRenderLayer.getModel())) {
+                this.guardRenderLayer.setModel(guardData.model());
+                this.guardRenderLayer.setScale(guardData.scale());
+                this.guardRenderLayer.setRetry(true);
+            }
+            if (shouldRender(pommelData.model(), this.pommelRenderLayer.getModel())) {
+                this.pommelRenderLayer.setModel(pommelData.model());
+                this.pommelRenderLayer.setScale(pommelData.scale());
+                this.pommelRenderLayer.setRetry(true);
+            }
 
-                if ( CheckedResourceLocation.exists(localGripModel.getModelResource(animatable)) ){
-                    if (CheckedResourceLocation.exists(localGripModel.getTextureResource(animatable))) renderType = RenderType.entityTranslucent(localGripModel.getTextureResource(animatable));
-                    this.reRender(this.gripModel, poseStack, bufferSource, animatable, renderType, bufferSource.getBuffer(renderType), partialTick, packedLight, packedOverlay, this.getRenderColor(animatable, partialTick, packedLight).argbInt());
-                }
+            if ( CheckedResourceLocation.exists(localGripModel.getModelResource(animatable)) ){
+                if (CheckedResourceLocation.exists(localGripModel.getTextureResource(animatable))) renderType = RenderType.entityTranslucent(localGripModel.getTextureResource(animatable));
+                this.reRender(this.gripModel, poseStack, bufferSource, animatable, renderType, bufferSource.getBuffer(renderType), partialTick, packedLight, packedOverlay, this.getRenderColor(animatable, partialTick, packedLight).argbInt());
             }
         }
 

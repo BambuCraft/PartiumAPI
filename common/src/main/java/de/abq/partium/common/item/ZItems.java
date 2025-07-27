@@ -40,13 +40,13 @@ public class ZItems {
         register.accept(SWORD, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "sword"));
 
         //NEEDS WORK
-        register.accept(PICKAXE, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "pickaxe"));
-        register.accept(AXE, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "axe"));
-        register.accept(HOE, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "hoe"));
-        register.accept(SHOVEL, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "shovel"));
-        register.accept(TRIDENT, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "trident"));
-        register.accept(MACE, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "mace"));
-        register.accept(BOW, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "bow"));
-        register.accept(CROSSBOW, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "crossbow"));
+         register.accept(PICKAXE, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "pickaxe"));
+         register.accept(AXE, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "axe"));
+         register.accept(HOE, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "hoe"));
+         register.accept(SHOVEL, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "shovel"));
+         register.accept(TRIDENT, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "trident"));
+         register.accept(MACE, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "mace"));
+         register.accept(BOW, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "bow"));
+         register.accept(CROSSBOW, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "crossbow"));
     }
 }
