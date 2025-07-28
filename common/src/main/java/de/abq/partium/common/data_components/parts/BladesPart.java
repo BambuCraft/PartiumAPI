@@ -7,7 +7,9 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Iterator;
 import java.util.Optional;
 
 public record BladesPart(Blade primary, Blade secondary, Blade tertiary){
@@ -18,6 +20,29 @@ public record BladesPart(Blade primary, Blade secondary, Blade tertiary){
                     Blade.CODEC.optionalFieldOf("tertiary", Blade.DEFAULT).forGetter(BladesPart::tertiary)
             ).apply(instance, BladesPart::new)
     );
+
+    public static final Iterator<Blade> iter(BladesPart blades){
+        int size = 3;
+        return new Iterator<>(){
+            private int pos = 0;
+            @Override
+            public boolean hasNext() {
+                return pos < size;
+            }
+
+            @Override
+            public Blade next() {
+                if (pos == 0) {
+                    return blades.primary;
+                } else if (pos == 1) {
+                    return blades.secondary;
+                } else if (pos == 2) {
+                    return blades.tertiary;
+                }
+                return null;
+            }
+        };
+    }
 
     public static final StreamCodec<RegistryFriendlyByteBuf, BladesPart> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.fromCodec(Blade.CODEC), BladesPart::primary,
