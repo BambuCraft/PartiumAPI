@@ -44,6 +44,10 @@ public class PartiumNF {
             bindDataComponents( event, PartiumDataComponents::register );
             bindItems( event, ZItems::registerItems );
         });
+        eventBus.addListener((FMLClientSetupEvent event) -> {
+            PostProcessingManager postProcessingManager = VeilRenderSystem.renderer().getPostProcessingManager();
+            mirrorPipeline = postProcessingManager.getPipeline(Partium.path("mirror"));
+        });
     }
 
 
@@ -79,11 +83,6 @@ public class PartiumNF {
             modid = Partium.MOD_ID
     )
     static class ClientGameEvents {
-        @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event){
-            PostProcessingManager postProcessingManager = VeilRenderSystem.renderer().getPostProcessingManager();
-            mirrorPipeline = postProcessingManager.getPipeline(Partium.path("mirror"));
-        }
         @SubscribeEvent
         public static void onRenderLevelStage(RenderLevelStageEvent event){
             if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_WEATHER) return;
