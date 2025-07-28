@@ -79,6 +79,7 @@ public class PartiumNF {
             modid = Partium.MOD_ID
     )
     static class ClientGameEvents {
+        @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event){
             PostProcessingManager postProcessingManager = VeilRenderSystem.renderer().getPostProcessingManager();
             mirrorPipeline = postProcessingManager.getPipeline(Partium.path("mirror"));
