@@ -20,7 +20,7 @@ public class Partium {
         //PartsRegistry.loadParts(Minecraft.getInstance().getResourceManager());
     }
 
-    public static ResourceLocation path(String id) {
-        return ResourceLocation.fromNamespaceAndPath(MOD_ID, id);
+    public static ResourceLocation path(String location) {
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, location);
     }
 }

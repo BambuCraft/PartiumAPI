@@ -1,6 +1,6 @@
 package de.abq.partium;
 
-import de.abq.partium.common.data_components.ELDataComponents;
+import de.abq.partium.common.data_components.PartiumDataComponents;
 import de.abq.partium.common.item.ZItems;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.core.Registry;
@@ -21,7 +21,7 @@ public class PartiumFabric implements ModInitializer {
 
 
         bindItems( ZItems::registerItems );
-        bindDataComponents( ELDataComponents::register );
+        bindDataComponents( PartiumDataComponents::register );
 
     }
 
