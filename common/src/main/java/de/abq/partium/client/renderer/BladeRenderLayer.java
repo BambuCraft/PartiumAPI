@@ -33,7 +33,7 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
     private int primaryInnerColor = -1;
     private int primaryOuterColor = -1;
 
-    public BladeRenderLayer(ToolRenderer entityRendererIn) {
+    public BladeRenderLayer(SwordRenderer entityRendererIn) {
         super(entityRendererIn);
         this.emitterLocation = new Vector3f();
     }
@@ -48,8 +48,10 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
             isBladeFineCut = bladeData.fine_cut();
             isBladeCracked = bladeData.cracked();
 
-            if (primaryInnerColor == -1 && blade_joint.getName().equals("primary")) primaryInnerColor = Util.HexStringToIntARGB(bladeData.innerColor());
-            if (primaryOuterColor == -1 && blade_joint.getName().equals("primary")) primaryOuterColor = Util.HexStringToIntARGB(bladeData.outerColor());
+            if (primaryInnerColor == -1 && blade_joint.getName().equals("primary"))
+                primaryInnerColor = Util.HexStringToIntARGB(bladeData.innerColor());
+            if (primaryOuterColor == -1 && blade_joint.getName().equals("primary"))
+                primaryOuterColor = Util.HexStringToIntARGB(bladeData.outerColor());
 
             if (bladeData.model().getPath().isBlank() || bladeData.model().getNamespace().isBlank()){
                 Tuple<MultiBufferSource, PoseStack> blade = renderLightsaberBlade(bufferSource, poseStack, blade_joint, bladeData.length() * 2, Util.HexStringToIntARGB(bladeData.outerColor(), 0x88), Util.HexStringToIntARGB(bladeData.innerColor(), 0xff));
@@ -86,23 +88,18 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
 
         float tip_length = 0.73f;
         float inner_blade_thickness = .25f, inner_blade_length = .25f;
-        float outer_blade_thickness = inner_blade_thickness * 3.5f, outer_blade_length = inner_blade_length * 3.5f;
+        //float outer_blade_thickness = inner_blade_thickness * 3.5f, outer_blade_length = inner_blade_length * 3.5f;
 
         if (isBladeFineCut) {
             tip_length = 1f;
             inner_blade_thickness = .2f;
             inner_blade_length = .75f;
-            outer_blade_thickness = inner_blade_thickness * 1.5f;
-            outer_blade_length = inner_blade_length * 1.5f;
+            //outer_blade_thickness = inner_blade_thickness * 1.5f;
+            //outer_blade_length = inner_blade_length * 1.5f;
         }
         float bladeHeight = completeBladeLength - tip_length;
 
         RenderSystem.enableBlend();
-        /* TODO: Implement blade using Veil
-        Optional<ShaderInstance> shaderInstanceOpt = Services.PLATFORM.loaderShaderInstance(
-                ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID,"lightsaber"), VertexFormat.builder().build());
-        shaderInstanceOpt.ifPresent(shaderInstance -> RenderSystem.setShader(() -> shaderInstance));
-        */
 
         /*
         //Outer Blade
