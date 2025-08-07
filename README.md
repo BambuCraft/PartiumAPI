@@ -55,6 +55,8 @@ Further knowladge can be obtained in the [wiki](https://github.com/BambuCraft/Pa
 
 //Test components contained in the mod
 /give @p partium:sword[partium:parts={"grip":{"model":"partium:test_grip"},"pommel":{"model":"partium:test_pommel", "scale":0.75f},"emitter":{"model":"partium:test_emitter", "scale":0.75f},"guard":{"model":"partium:test_guard", "scale":0.75f}}]
+/give @p partium:sword[partium:parts={"blades": {"primary":{ "length":13.0, "innerColor": "#ffffff", "outerColor": "#44aaff", "model":""}},"grip":{"model":"partium:test_grip"},"pommel":{"model":"partium:test_pommel", "scale":0.75f},"emitter":{"model":"partium:test_emitter", "scale":0.75f},"guard":{"model":"partium:test_guard", "scale":0.75f}}]
+	
 ```
 
 #### Requirments:
