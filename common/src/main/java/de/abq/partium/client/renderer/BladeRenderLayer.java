@@ -40,8 +40,8 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
 
     @Override
     public void renderForBone(PoseStack poseStack, PartiumSwordItem animatable, GeoBone bone, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
-        if (shouldRender && blades != null)
-         for (GeoBone blade_joint : this.bones ){
+        if (!shouldRender && blades == null) return;
+        for (GeoBone blade_joint : this.bones ){
             Optional<BladesPart.Blade> bladeDataOpt = blades.getByString(blade_joint.getName());
             if (bladeDataOpt.isEmpty()) continue;
             BladesPart.Blade bladeData = bladeDataOpt.get();
