@@ -1,6 +1,11 @@
 package de.abq.partium;
 
+import de.abq.partium.common.item.PartiumSwordItem;
+import foundry.veil.api.client.render.VeilRenderSystem;
+import foundry.veil.api.client.render.post.PostPipeline;
+import foundry.veil.api.client.render.post.PostProcessingManager;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,5 +27,26 @@ public class Partium {
 
     public static ResourceLocation path(String id) {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, id);
+    }
+
+    public static void onCommonRenderHandPost(ItemStack itemStack){
+        //Make more common, move to right methods
+        //if (!(itemStack.getItem() instanceof PartiumSwordItem) ) return;
+        //makeLightsaberBladePost();
+    }
+
+    public static final ResourceLocation LIGHTSABER_POST_SHADER = Partium.path("lightsaber_blade");
+    public static void commonSetup(){
+
+    }
+
+    public static void makeLightsaberBladePost(){
+        try {
+            PostProcessingManager postProcessingManager = VeilRenderSystem.renderer().getPostProcessingManager();
+            PostPipeline pipeline = postProcessingManager.getPipeline(LIGHTSABER_POST_SHADER);
+            postProcessingManager.runPipeline(pipeline);
+        } catch (Exception exception){
+            Partium.LOG.error("++>", exception);
+        }
     }
 }

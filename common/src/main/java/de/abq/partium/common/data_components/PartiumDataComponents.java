@@ -6,7 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.function.BiConsumer;
 
-public class ELDataComponents {
+public class PartiumDataComponents {
 
     public static final DataComponentType<PartsComponents> SWORD_PARTS = DataComponentType.<PartsComponents>builder()
                     // The codec to read/write the data to disk

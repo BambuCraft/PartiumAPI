@@ -1,15 +1,24 @@
 package de.abq.partium;
 
-import de.abq.partium.common.data_components.ELDataComponents;
+import de.abq.partium.common.data_components.PartiumDataComponents;
 import de.abq.partium.common.item.ZItems;
+import foundry.veil.api.client.render.VeilRenderSystem;
+import foundry.veil.api.client.render.post.PostPipeline;
+import foundry.veil.api.client.render.post.PostProcessingManager;
+import foundry.veil.api.event.VeilPostProcessingEvent;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.RenderHandEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
-import software.bernie.geckolib.animatable.GeoItem;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -21,8 +30,11 @@ public class PartiumNF {
         Partium.init();
 
         eventBus.addListener((RegisterEvent event) -> {
-            bindDataComponents( event, ELDataComponents::register );
+            bindDataComponents( event, PartiumDataComponents::register );
             bindItems( event, ZItems::registerItems );
+        });
+        eventBus.addListener((FMLClientSetupEvent event) -> {
+            Partium.commonSetup();
         });
     }
     private void bindItems(RegisterEvent event, Consumer<BiConsumer<Item, ResourceLocation>> source){
@@ -40,5 +52,17 @@ public class PartiumNF {
                 event.register(Registries.DATA_COMPONENT_TYPE, rl, () -> t);
             });
         }
+    }
+
+     @EventBusSubscriber(
+             value = Dist.CLIENT,
+             bus = EventBusSubscriber.Bus.GAME,
+             modid = Partium.MOD_ID
+     )
+     static class ClientGameEvents{
+         @SubscribeEvent(priority = EventPriority.HIGHEST)
+         public static void onRenderHandPost(RenderHandEvent event){
+             Partium.onCommonRenderHandPost(event.getItemStack());
+         }
     }
 }

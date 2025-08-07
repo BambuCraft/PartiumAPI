@@ -1,7 +1,7 @@
 package de.abq.partium.common.item;
 
 import de.abq.partium.Partium;
-import de.abq.partium.common.data_components.ELDataComponents;
+import de.abq.partium.common.data_components.PartiumDataComponents;
 import de.abq.partium.common.data_components.PartsComponents;
 import de.abq.partium.platform.Services;
 import net.minecraft.resources.ResourceLocation;
@@ -15,7 +15,7 @@ public class ZItems {
 
     private static final Map<ResourceLocation, Item> ITEMS = new LinkedHashMap<>();
 
-    private static final Item.Properties DEFAULT_PROPERTIES = Services.PLATFORM.defaultItemBuilder().rarity(Rarity.EPIC).stacksTo(1).component(ELDataComponents.SWORD_PARTS, PartsComponents.DEFAULT);
+    private static final Item.Properties DEFAULT_PROPERTIES = Services.PLATFORM.defaultItemBuilder().rarity(Rarity.EPIC).stacksTo(1).component(PartiumDataComponents.SWORD_PARTS, PartsComponents.DEFAULT);
 
     public static final Item SWORD = build("sword", new PartiumSwordItem(Tiers.NETHERITE, DEFAULT_PROPERTIES));
     public static final Item PICKAXE = build("pickaxe", new PartiumPickaxeItem(Tiers.NETHERITE, DEFAULT_PROPERTIES));

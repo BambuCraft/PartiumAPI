@@ -1,0 +1,9 @@
+{
+  "stages": [
+    {
+      "type": "veil:blit",
+      "shader": "partium:lightsaber",
+      "in": "minecraft:main"
+    }
+  ]
+}

@@ -3,7 +3,7 @@ package de.abq.partium.client.renderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import de.abq.partium.Partium;
 import de.abq.partium.client.model.DynamicItemModel;
-import de.abq.partium.common.data_components.ELDataComponents;
+import de.abq.partium.common.data_components.PartiumDataComponents;
 import de.abq.partium.common.data_components.PartsComponents;
 import de.abq.partium.common.data_components.parts.BladesPart;
 import de.abq.partium.common.data_components.parts.ModelPart;
@@ -53,7 +53,7 @@ public class ToolRenderer extends GeoItemRenderer<PartiumSwordItem> {
 
         RenderType renderType = getRenderType(animatable, getTextureLocation(animatable), bufferSource, partialTick);
         if (!isFixed) {
-            PartsComponents parts = stack.getComponents().get(ELDataComponents.SWORD_PARTS);
+            PartsComponents parts = stack.getComponents().get(PartiumDataComponents.SWORD_PARTS);
 
             if (renderType == null) {
                 Partium.LOG.warn("renderType == null");
