@@ -45,17 +45,11 @@ public class PartiumNF {
             bindItems( event, ZItems::registerItems );
         });
         eventBus.addListener((FMLClientSetupEvent event) -> {
-            PostProcessingManager postProcessingManager = VeilRenderSystem.renderer().getPostProcessingManager();
-            mirrorPipeline = postProcessingManager.getPipeline(Partium.path("mirror"));
         });
     }
 
-
-
     public static void makeBlackWholeShaders() {
         try {
-            mirrorPipeline.getUniformSafe("mirrorOffset").setFloat(Easing.EASE_OUT_CIRC.ease(0));
-            mirrorPipeline.getUniformSafe("shaderAccent").setVector(0xff, 0xff, 0xff);
             VeilRenderSystem.renderer().getPostProcessingManager().runPipeline(mirrorPipeline);
         }catch (Exception ignored){}
     }
@@ -85,22 +79,27 @@ public class PartiumNF {
     static class ClientGameEvents {
         @SubscribeEvent
         public static void onRenderLevelStage(RenderLevelStageEvent event){
-            if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_WEATHER) return;
-            makeBlackWholeShaders();
+            //if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_WEATHER) return;
+            //makeBlackWholeShaders();
         }
         @SubscribeEvent(priority = EventPriority.LOWEST)
         public static void onRenderHandPost(RenderHandEvent event){
+            PostProcessingManager postProcessingManager = VeilRenderSystem.renderer().getPostProcessingManager();
+            mirrorPipeline = postProcessingManager.getPipeline(Partium.path("lightsaber_blade"));
             ItemStack itemStack = event.getItemStack();
             if (!(itemStack.getItem() instanceof PartiumSwordItem) ) return;
+            makeBlackWholeShaders();
+            /*
             var components = itemStack.getComponents();
             if (!components.has(PartiumDataComponents.SWORD_PARTS)) return;
             var sword_comps = components.get(PartiumDataComponents.SWORD_PARTS);
+
             for (Iterator<BladesPart.Blade> it = BladesPart.iter(sword_comps.blades()); it.hasNext(); ) {
                 BladesPart.Blade blade = it.next();
                 if (!blade.model().getPath().isEmpty()) return;
                 var outer_color = TextColor.parseColor(blade.outerColor()).result().get().getValue();
                 makeBlackWholeShaders();
-            }
+            }*/
         }
     }
 }

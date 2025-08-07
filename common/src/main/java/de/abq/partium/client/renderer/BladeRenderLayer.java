@@ -114,9 +114,7 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
             outer_blade_length = inner_blade_length * 1.5f;
         }
         float bladeHeight = completeBladeLength - tip_length;
-
-        shader.bind();
-        /*VertexConsumer outerBuffer = bufferSource.getBuffer(renderType);
+        VertexConsumer outerBuffer = bufferSource.getBuffer(renderType);
 
         outerBuffer.addVertex(matrix, -outer_blade_thickness, (bladeHeight + 0.01f), outer_blade_length).setColor(outerColor).setUv(u + 0.5f, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f, 1f, 1f);
         outerBuffer.addVertex(matrix, outer_blade_thickness, (bladeHeight + 0.01f), outer_blade_length).setColor(outerColor).setUv(u + 1.0f, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f, 1f, 1f);
@@ -158,9 +156,7 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
         outerBuffer.addVertex(matrix, outer_blade_thickness, bladeHeight, outer_blade_length).setColor(outerColor).setUv(u + 1.0f, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f,1f,1f);
         outerBuffer.addVertex(matrix, -outer_blade_length, bladeHeight, -outer_blade_length).setColor(outerColor).setUv(u, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f,1f,1f);
 
-*/
         //Inner Blade
-
         BufferBuilder innerBuffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
         // Bottom square
         // Front face
@@ -204,8 +200,6 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
         innerBuffer.addVertex(matrix, inner_blade_thickness, bladeHeight, inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f, 1f, 1f);
         innerBuffer.addVertex(matrix, -inner_blade_thickness, bladeHeight, -inner_blade_length).setColor(innerColor).setUv(u, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight).setNormal(1f, 1f, 1f);
 
-        //renderType.clearRenderState();
-        ShaderProgram.unbind();
         poseStack.popPose();
         return new Tuple<>(bufferSource, poseStack);
     }

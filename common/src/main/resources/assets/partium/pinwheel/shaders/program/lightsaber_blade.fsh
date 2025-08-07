@@ -1,13 +1,12 @@
-uniform sampler2D Sampler0;
+//#include veil:space_helper
 
-uniform vec4 ColorModulator;
-uniform vec2 ScreenSize;
+uniform sampler2D DiffuseSampler0;
 
-in vec4 vertexColor;
+in vec2 texCoord;
 out vec4 fragColor;
 
 void main() {
-    vec2 uv = vec2(1.0 - gl_FragCoord.x + rand(), gl_FragCoord.y) / ScreenSize.xy;
-    vec4 color = texture(Sampler0, uv) * ColorModulator;
-    fragColor = color;
+    vec3 camPos = VeilCamera.CameraPosition + VeilCamera.CameraBobOffset;
+    vec4 baseColor = texture(DiffuseSampler0, texCoord);
+    fragColor = baseColor;
 }

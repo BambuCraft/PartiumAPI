@@ -214,10 +214,7 @@ void main() {
     vec3 viewPos = viewPosFromDepthSample(depthSample, texCoord);
     vec3 rayDir = viewDirFromUv(texCoord) * rotatorLR(LR) * rotatorUD(UD) * rotatorMaybe(maybe);
 
-
-
     vec3 camPos = VeilCamera.CameraPosition + VeilCamera.CameraBobOffset;
-
 
     vec3 handOffset = vec3(0,mirrorOffset,0);
     vec3 direction = vec3(
