@@ -36,10 +36,9 @@ public class Partium {
     }
 
     public static final ResourceLocation LIGHTSABER_POST_SHADER = Partium.path("lightsaber_blade");
-    public static void commonSetup(){
+    public static void commonSetup(){}
 
-    }
-
+    /* Do I even need a post shader? */
     public static void makeLightsaberBladePost(){
         try {
             PostProcessingManager postProcessingManager = VeilRenderSystem.renderer().getPostProcessingManager();
