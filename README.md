@@ -2,7 +2,7 @@
 
 ### About
 This mod is a mod for building custom Swords and Lightsabers out of different parts you can craft.
-</br>
+<br/>
 You can also add your own Models, Texture and Animations.
 
 ---
@@ -70,3 +70,5 @@ Don't you miss your childhood memories, you made with the [Fisk's Advanced Lighs
 #### References:
 - https://github.com/birsy/clinker-mod/
 - https://github.com/Lekeko/Affix
+- https://github.com/SpacePotatoee/MinecraftFoundFootage
+- https://github.com/FoundryMC/veil-example-mod
