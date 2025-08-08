@@ -25,6 +25,10 @@
     },
     {
       "type": "minecraft:overlay"
+    },
+    {
+      "type": "minecraft:output",
+      "framebuffer": "partium:lightsaber_fb"
     }
   ]
 }

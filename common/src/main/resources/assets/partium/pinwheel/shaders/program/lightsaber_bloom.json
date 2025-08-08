@@ -1,0 +1,14 @@
+{
+  "vertex": "veil:blit_screen",
+  "fragment": "partium:lightsaber_bloom",
+  "textures": {
+    "NoiseTexture": {
+      "type": "location",
+      "location": "minecraft:textures/environment/clouds.png"
+    },
+    "DistortTexture": {
+      "type": "location",
+      "location": "minecraft:textures/environment/clouds.png"
+    }
+  }
+}

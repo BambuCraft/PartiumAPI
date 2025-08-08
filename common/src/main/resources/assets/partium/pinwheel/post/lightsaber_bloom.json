@@ -1,0 +1,11 @@
+{
+  "stages": [
+    {
+      "type": "veil:blit",
+      "shader": "partium:lightsaber_bloom",
+      "in": "partium:lightsaber_fb",
+      "out": "veil:post",
+      "clear": true
+    }
+  ]
+}

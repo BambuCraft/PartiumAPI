@@ -49,7 +49,7 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
 
                 Tuple<MultiBufferSource, PoseStack> blade = LightsaberBladeRenderHelper.render(
                         bufferSource, poseStack, blade_joint, bladeData.length() * 2,
-                        Util.HexStringToIntRGB(bladeData.outerColor()), Util.HexStringToIntRGB(bladeData.innerColor()),
+                        primaryOuterColor, primaryInnerColor,
                         this.emitterLocation, this.parentScale, isBladeFineCut, isBladeCracked);
 
                 bufferSource = blade.getA();
@@ -61,12 +61,6 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
         }
         setBones(new ArrayList<>());
         super.renderForBone(poseStack, animatable, bone, renderType, bufferSource, buffer, partialTick, packedLight, packedOverlay);
-    }
-
-    private float calcScaleOffset(float scale){
-        if (scale == 1) return 1;
-        if (scale == 0) return 0;
-        return 1-1f;
     }
 
     public BladesPart getBlades() {

@@ -5,8 +5,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import de.abq.partium.Partium;
 import foundry.veil.api.client.render.VeilRenderSystem;
+import foundry.veil.api.client.render.post.PostPipeline;
+import foundry.veil.api.client.render.post.PostProcessingManager;
 import foundry.veil.api.client.render.rendertype.VeilRenderType;
 import foundry.veil.api.client.render.shader.program.ShaderProgram;
+import foundry.veil.api.client.render.shader.uniform.ShaderUniform;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -129,14 +132,16 @@ public class LightsaberBladeRenderHelper {
             Partium.LOG.error("Error loading Shader {}", BLADE_SHADER_ID);
             return new Tuple<>(bufferSource, poseStack);
         }
-        //shader.setUniformBlock("u_innerColor",0);
-        //shader.setUniformBlock("u_OuterColor",1);
-        //shader.getUniform("u_innerColor").setInt(innerColor);
+        ShaderUniform uInnerColor =  shader.getUniform("u_InnerColor");
+        if (uInnerColor == null) {
+            Partium.LOG.error("Error getting uniform: u_InnerColor");
+        } else {
+            uInnerColor.setInt(innerColor);
+        }
         //TODO: Find out how I can supply multiple uniforms.
         //TODO: create a framebuffer and create a bloom effect for the lightsaber.
-        shader.getUniform("u_OuterColor").setInt(outerColor);
+        makeBladeBloom(outerColor);
         shader.bind();
-
         VertexConsumer innerBuffer = bufferSource.getBuffer(veilType);
         // Bottom square
         /*
@@ -147,61 +152,71 @@ public class LightsaberBladeRenderHelper {
         */
 
         // Front face
-        innerBuffer.addVertex(matrix, -inner_blade_thickness, bladeHeight, inner_blade_length).setColor(innerColor).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
-        innerBuffer.addVertex(matrix, inner_blade_thickness, bladeHeight, inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
-        innerBuffer.addVertex(matrix, inner_blade_thickness, -0.5f, inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
-        innerBuffer.addVertex(matrix, -inner_blade_thickness, -0.5f, inner_blade_length).setColor(innerColor).setUv(u, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
+        innerBuffer.addVertex(matrix, -inner_blade_thickness, bladeHeight, inner_blade_length).setColor(innerColor).setUv(u, v).setLight(maxLight).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1f,1f,1f);
+        innerBuffer.addVertex(matrix, inner_blade_thickness, bladeHeight, inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v).setLight(maxLight).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1f,1f,1f);
+        innerBuffer.addVertex(matrix, inner_blade_thickness, -0.5f, inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v + 1.0f).setLight(maxLight).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1f,1f,1f);
+        innerBuffer.addVertex(matrix, -inner_blade_thickness, -0.5f, inner_blade_length).setColor(innerColor).setUv(u, v + 1.0f).setLight(maxLight).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1f,1f,1f);
 
         // Back face
-        innerBuffer.addVertex(matrix, -inner_blade_thickness, -0.5f, -inner_blade_length).setColor(innerColor).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
-        innerBuffer.addVertex(matrix, inner_blade_thickness, -0.5f, -inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
-        innerBuffer.addVertex(matrix, inner_blade_thickness, bladeHeight, -inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
-        innerBuffer.addVertex(matrix, -inner_blade_thickness, bladeHeight, -inner_blade_length).setColor(innerColor).setUv(u, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
+        innerBuffer.addVertex(matrix, -inner_blade_thickness, -0.5f, -inner_blade_length).setColor(innerColor).setUv(u, v).setLight(maxLight).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1f,1f,1f);
+        innerBuffer.addVertex(matrix, inner_blade_thickness, -0.5f, -inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v).setLight(maxLight).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1f,1f,1f);
+        innerBuffer.addVertex(matrix, inner_blade_thickness, bladeHeight, -inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v + 1.0f).setLight(maxLight).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1f,1f,1f);
+        innerBuffer.addVertex(matrix, -inner_blade_thickness, bladeHeight, -inner_blade_length).setColor(innerColor).setUv(u, v + 1.0f).setLight(maxLight).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1f,1f,1f);
 
         // Left face
-        innerBuffer.addVertex(matrix, -inner_blade_thickness, bladeHeight, -inner_blade_length).setColor(innerColor).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
-        innerBuffer.addVertex(matrix, -inner_blade_thickness, bladeHeight, inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
-        innerBuffer.addVertex(matrix, -inner_blade_thickness, -0.5f, inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
-        innerBuffer.addVertex(matrix, -inner_blade_thickness, -0.5f, -inner_blade_length).setColor(innerColor).setUv(u, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
+        innerBuffer.addVertex(matrix, -inner_blade_thickness, bladeHeight, -inner_blade_length).setColor(innerColor).setUv(u, v).setLight(maxLight).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1f,1f,1f);
+        innerBuffer.addVertex(matrix, -inner_blade_thickness, bladeHeight, inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v).setLight(maxLight).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1f,1f,1f);
+        innerBuffer.addVertex(matrix, -inner_blade_thickness, -0.5f, inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v + 1.0f).setLight(maxLight).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1f,1f,1f);
+        innerBuffer.addVertex(matrix, -inner_blade_thickness, -0.5f, -inner_blade_length).setColor(innerColor).setUv(u, v + 1.0f).setLight(maxLight).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1f,1f,1f);
 
         // Right face
-        innerBuffer.addVertex(matrix, inner_blade_thickness, bladeHeight, inner_blade_length).setColor(innerColor).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
-        innerBuffer.addVertex(matrix, inner_blade_thickness, bladeHeight, -inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
-        innerBuffer.addVertex(matrix, inner_blade_thickness, -0.5f, -inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
-        innerBuffer.addVertex(matrix, inner_blade_thickness, -0.5f, inner_blade_length).setColor(innerColor).setUv(u, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
+        innerBuffer.addVertex(matrix, inner_blade_thickness, bladeHeight, inner_blade_length).setColor(innerColor).setUv(u, v).setLight(maxLight).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1f,1f,1f);
+        innerBuffer.addVertex(matrix, inner_blade_thickness, bladeHeight, -inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v).setLight(maxLight).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1f,1f,1f);
+        innerBuffer.addVertex(matrix, inner_blade_thickness, -0.5f, -inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v + 1.0f).setLight(maxLight).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1f,1f,1f);
+        innerBuffer.addVertex(matrix, inner_blade_thickness, -0.5f, inner_blade_length).setColor(innerColor).setUv(u, v + 1.0f).setLight(maxLight).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1f,1f,1f);
         /*
         // Top face
-        innerBuffer.addVertex(matrix, -inner_blade_thickness, bladeHeight, inner_blade_length).setColor(innerColor).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
-        innerBuffer.addVertex(matrix, inner_blade_thickness, bladeHeight, inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
-        innerBuffer.addVertex(matrix, inner_blade_thickness, bladeHeight, -inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
-        innerBuffer.addVertex(matrix, -inner_blade_thickness, bladeHeight, -inner_blade_length).setColor(innerColor).setUv(u, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
+        innerBuffer.addVertex(matrix, -inner_blade_thickness, bladeHeight, inner_blade_length).setColor(innerColor).setUv(u, v).setLight(maxLight);
+        innerBuffer.addVertex(matrix, inner_blade_thickness, bladeHeight, inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v).setLight(maxLight);
+        innerBuffer.addVertex(matrix, inner_blade_thickness, bladeHeight, -inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v + 1.0f).setLight(maxLight);
+        innerBuffer.addVertex(matrix, -inner_blade_thickness, bladeHeight, -inner_blade_length).setColor(innerColor).setUv(u, v + 1.0f).setLight(maxLight);
         */
 
         //Tip front
-        innerBuffer.addVertex(matrix, 0f, bladeHeight + tip_length, 0f).setColor(innerColor).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
-        innerBuffer.addVertex(matrix, inner_blade_thickness, bladeHeight, inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
-        innerBuffer.addVertex(matrix, -inner_blade_thickness, bladeHeight, inner_blade_length).setColor(innerColor).setUv(u, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
+        innerBuffer.addVertex(matrix, 0f, bladeHeight + tip_length, 0f).setColor(innerColor).setUv(u, v).setLight(maxLight).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1f,1f,1f);
+        innerBuffer.addVertex(matrix, inner_blade_thickness, bladeHeight, inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v + 1.0f).setLight(maxLight).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1f,1f,1f);
+        innerBuffer.addVertex(matrix, -inner_blade_thickness, bladeHeight, inner_blade_length).setColor(innerColor).setUv(u, v + 1.0f).setLight(maxLight).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1f,1f,1f);
 
-        innerBuffer.addVertex(matrix, 0f, bladeHeight + tip_length, 0f).setColor(innerColor).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
-        innerBuffer.addVertex(matrix, -inner_blade_thickness, bladeHeight, inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
-        innerBuffer.addVertex(matrix, -inner_blade_thickness, bladeHeight, -inner_blade_length).setColor(innerColor).setUv(u, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
+        innerBuffer.addVertex(matrix, 0f, bladeHeight + tip_length, 0f).setColor(innerColor).setUv(u, v).setLight(maxLight).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1f,1f,1f);
+        innerBuffer.addVertex(matrix, -inner_blade_thickness, bladeHeight, inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v + 1.0f).setLight(maxLight).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1f,1f,1f);
+        innerBuffer.addVertex(matrix, -inner_blade_thickness, bladeHeight, -inner_blade_length).setColor(innerColor).setUv(u, v + 1.0f).setLight(maxLight).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1f,1f,1f);
 
-        innerBuffer.addVertex(matrix, 0f, bladeHeight + tip_length, 0f).setColor(innerColor).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
-        innerBuffer.addVertex(matrix, inner_blade_thickness, bladeHeight, -inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
-        innerBuffer.addVertex(matrix, -inner_blade_thickness, bladeHeight, -inner_blade_length).setColor(innerColor).setUv(u, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
+        innerBuffer.addVertex(matrix, 0f, bladeHeight + tip_length, 0f).setColor(innerColor).setUv(u, v).setLight(maxLight).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1f,1f,1f);
+        innerBuffer.addVertex(matrix, inner_blade_thickness, bladeHeight, -inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v + 1.0f).setLight(maxLight).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1f,1f,1f);
+        innerBuffer.addVertex(matrix, -inner_blade_thickness, bladeHeight, -inner_blade_length).setColor(innerColor).setUv(u, v + 1.0f).setLight(maxLight).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1f,1f,1f);
 
-        innerBuffer.addVertex(matrix, 0f, bladeHeight + tip_length, 0f).setColor(innerColor).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
-        innerBuffer.addVertex(matrix, inner_blade_thickness, bladeHeight, inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
-        innerBuffer.addVertex(matrix, -inner_blade_thickness, bladeHeight, -inner_blade_length).setColor(innerColor).setUv(u, v + 1.0f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(maxLight);
+        innerBuffer.addVertex(matrix, 0f, bladeHeight + tip_length, 0f).setColor(innerColor).setUv(u, v).setLight(maxLight).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1f,1f,1f);
+        innerBuffer.addVertex(matrix, inner_blade_thickness, bladeHeight, inner_blade_length).setColor(innerColor).setUv(u + 1.0f, v + 1.0f).setLight(maxLight).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1f,1f,1f);
+        innerBuffer.addVertex(matrix, -inner_blade_thickness, bladeHeight, -inner_blade_length).setColor(innerColor).setUv(u, v + 1.0f).setLight(maxLight).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1f,1f,1f);
 
-        innerBuffer.addVertex(matrix, 0f, bladeHeight + tip_length, 0f).setColor(innerColor).setUv(u, v).setLight(maxLight);
-        innerBuffer.addVertex(matrix, inner_blade_thickness, bladeHeight, inner_blade_length).setColor(innerColor).setUv(u, v).setLight(maxLight);
-        innerBuffer.addVertex(matrix, -inner_blade_thickness, bladeHeight, -inner_blade_length).setColor(innerColor).setUv(u, v).setLight(maxLight);
+        innerBuffer.addVertex(matrix, 0f, bladeHeight + tip_length, 0f).setColor(innerColor).setUv(u, v).setLight(maxLight).setNormal(1f,1f,1f).setOverlay(OverlayTexture.NO_OVERLAY);
+        innerBuffer.addVertex(matrix, inner_blade_thickness, bladeHeight, inner_blade_length).setColor(innerColor).setUv(u, v).setLight(maxLight).setNormal(1f,1f,1f).setOverlay(OverlayTexture.NO_OVERLAY);
+        innerBuffer.addVertex(matrix, -inner_blade_thickness, bladeHeight, -inner_blade_length).setColor(innerColor).setUv(u, v).setLight(maxLight).setNormal(1f,1f,1f).setOverlay(OverlayTexture.NO_OVERLAY);
         //Partium.makeLightsaberBladePost();
-
         ShaderProgram.unbind();
-
         poseStack.popPose();
         return new Tuple<>(bufferSource, poseStack);
+    }
+
+    private static void makeBladeBloom(int outerColor){
+        try {
+            PostProcessingManager postProcessingManager = VeilRenderSystem.renderer().getPostProcessingManager();
+            PostPipeline pipeline = postProcessingManager.getPipeline(Partium.path("lightsaber_bloom"));
+            assert pipeline != null;
+            pipeline.getUniformSafe("u_OuterColor").setInt(outerColor);
+            postProcessingManager.runPipeline(pipeline);
+        } catch (Exception exception) {
+            Partium.LOG.error("Exception occurred ", exception);
+        }
     }
 }
