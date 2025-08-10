@@ -1,11 +1,18 @@
 package de.abq.partium;
 
+import com.mojang.authlib.minecraft.client.MinecraftClient;
 import de.abq.partium.common.item.PartiumSwordItem;
 import foundry.veil.api.client.render.VeilRenderSystem;
 import foundry.veil.api.client.render.post.PostPipeline;
 import foundry.veil.api.client.render.post.PostProcessingManager;
+import foundry.veil.api.event.VeilRenderLevelStageEvent;
+import foundry.veil.platform.VeilEventPlatform;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SwordItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,17 +42,31 @@ public class Partium {
         //makeLightsaberBladePost();
     }
 
-    public static final ResourceLocation LIGHTSABER_POST_SHADER = Partium.path("lightsaber_blade");
-    public static void commonSetup(){}
+    public static final ResourceLocation LIGHTSABER_POST_SHADER = Partium.path("lightsaber_bloom");
+    public static void commonClientSetup(){
+        VeilEventPlatform.INSTANCE.onVeilRenderLevelStage((stage, levelRenderer, bufferSource, poseStack, projectionMatrix, renderTick, partialTicks, deltaTracker,camera, frustum) -> {
+            if (stage == VeilRenderLevelStageEvent.Stage.AFTER_LEVEL){
+                Minecraft instance = Minecraft.getInstance();
+                LocalPlayer player = instance.player;
+                if (player == null) return;
+                ItemStack main = player.getItemInHand(InteractionHand.MAIN_HAND);
+                //ItemStack off = player.getItemInHand(InteractionHand.OFF_HAND);
+                if (main.getItem() instanceof PartiumSwordItem){
+                    makeBladeBloom(0xffffff);
+                }
+            }
+        });
+    }
 
-    /* Do I even need a post processing? */
-    public static void makeLightsaberBladePost(){
+    private static void makeBladeBloom(int outerColor){
         try {
             PostProcessingManager postProcessingManager = VeilRenderSystem.renderer().getPostProcessingManager();
             PostPipeline pipeline = postProcessingManager.getPipeline(LIGHTSABER_POST_SHADER);
+            assert pipeline != null;
+            pipeline.getUniformSafe("u_OuterColor").setInt(outerColor);
             postProcessingManager.runPipeline(pipeline);
-        } catch (Exception exception){
-            Partium.LOG.error("++>", exception);
+        } catch (Exception exception) {
+            Partium.LOG.error("Exception occurred ", exception);
         }
     }
 }

@@ -2,10 +2,6 @@ package de.abq.partium;
 
 import de.abq.partium.common.data_components.PartiumDataComponents;
 import de.abq.partium.common.item.ZItems;
-import foundry.veil.api.client.render.VeilRenderSystem;
-import foundry.veil.api.client.render.post.PostPipeline;
-import foundry.veil.api.client.render.post.PostProcessingManager;
-import foundry.veil.api.event.VeilPostProcessingEvent;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -34,7 +30,7 @@ public class PartiumNF {
             bindItems( event, ZItems::registerItems );
         });
         eventBus.addListener((FMLClientSetupEvent event) -> {
-            Partium.commonSetup();
+            Partium.commonClientSetup();
         });
     }
     private void bindItems(RegisterEvent event, Consumer<BiConsumer<Item, ResourceLocation>> source){
