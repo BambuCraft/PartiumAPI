@@ -8,6 +8,7 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PickaxeItem;
+import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.Level;
 import software.bernie.geckolib.animatable.GeoItem;
@@ -22,7 +23,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.function.Consumer;
 
-public class PartiumSwordItem extends PickaxeItem implements GeoItem {
+public class PartiumSwordItem extends SwordItem implements GeoItem {
     private static final RawAnimation ACTIVATE_ANIM = RawAnimation.begin().thenPlay("use.activate");
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
