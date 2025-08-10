@@ -140,7 +140,6 @@ public class LightsaberBladeRenderHelper {
         }
         //TODO: Find out how I can supply multiple uniforms.
         //TODO: create a framebuffer and create a bloom effect for the lightsaber.
-        makeBladeBloom(outerColor);
         shader.bind();
         VertexConsumer innerBuffer = bufferSource.getBuffer(veilType);
         // Bottom square
@@ -208,15 +207,5 @@ public class LightsaberBladeRenderHelper {
         return new Tuple<>(bufferSource, poseStack);
     }
 
-    private static void makeBladeBloom(int outerColor){
-        try {
-            PostProcessingManager postProcessingManager = VeilRenderSystem.renderer().getPostProcessingManager();
-            PostPipeline pipeline = postProcessingManager.getPipeline(Partium.path("lightsaber_bloom"));
-            assert pipeline != null;
-            pipeline.getUniformSafe("u_OuterColor").setInt(outerColor);
-            postProcessingManager.runPipeline(pipeline);
-        } catch (Exception exception) {
-            Partium.LOG.error("Exception occurred ", exception);
-        }
-    }
+
 }

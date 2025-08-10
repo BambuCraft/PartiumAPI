@@ -5,10 +5,6 @@
     "NoiseTexture": {
       "type": "location",
       "location": "minecraft:textures/environment/clouds.png"
-    },
-    "DistortTexture": {
-      "type": "location",
-      "location": "minecraft:textures/environment/clouds.png"
     }
   }
 }

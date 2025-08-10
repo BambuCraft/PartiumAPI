@@ -7,8 +7,7 @@
       "type": "texture",
       "format": "RGBA8",
       "levels": 0,
-      "linear": false,
-      "name": "EmissiveSampler"
+      "linear": false
     }
   ],
   "depth": true
