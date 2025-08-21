@@ -63,7 +63,7 @@ public class LightsaberBladeRenderHelper {
 
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
-
+        RenderSystem.enableDepthTest();
         /*
         //Outer Blade
         VertexConsumer outerBuffer = bufferSource.getBuffer(RenderType.entityTranslucentEmissive(ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "textures/misc/lightsaber_blade_glow.png")));

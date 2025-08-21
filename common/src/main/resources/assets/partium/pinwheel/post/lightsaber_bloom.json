@@ -8,10 +8,10 @@
       "clear": false
     }
   ],
-  "depth": false,
+  "depth": true,
   "framebuffers": {
     "mix": {
-      "depth": false
+      "depth": true
     }
   },
   "textures": {
@@ -23,9 +23,17 @@
       "type": "framebuffer",
       "name": "veil:first_person"
     },
-    "HandDepth": {
+    "HandDepthSampler": {
       "type": "framebuffer",
       "name": "veil:first_person:depth"
+    },
+    "BladeDepthSampler": {
+      "type": "framebuffer",
+      "name": "partium:lightsaber_fb:depth"
+    },
+    "MainDepthSampler": {
+      "type": "framebuffer",
+      "name": "minecraft:main:depth"
     }
   }
 }
