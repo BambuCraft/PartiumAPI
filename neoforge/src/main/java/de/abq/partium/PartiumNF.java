@@ -22,7 +22,6 @@ import java.util.function.Consumer;
 @Mod(Partium.MOD_ID)
 public class PartiumNF {
     public PartiumNF(IEventBus eventBus) {
-
         Partium.init();
 
         eventBus.addListener((RegisterEvent event) -> {

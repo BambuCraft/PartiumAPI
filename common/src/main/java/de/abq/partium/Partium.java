@@ -51,22 +51,17 @@ public class Partium {
                 if (player == null) return;
                 ItemStack main = player.getItemInHand(InteractionHand.MAIN_HAND);
                 //ItemStack off = player.getItemInHand(InteractionHand.OFF_HAND);
+                PostProcessingManager postProcessingManager = VeilRenderSystem.renderer().getPostProcessingManager();
+                PostPipeline pipeline = postProcessingManager.getPipeline(LIGHTSABER_POST_SHADER);
+                assert pipeline != null;
+                //pipeline.getUniformSafe("u_OuterColor").setInt(0xffffff);
                 if (main.getItem() instanceof PartiumSwordItem){
-                    makeBladeBloom(0xffffff);
+                    if (!postProcessingManager.isActive(LIGHTSABER_POST_SHADER))
+                        postProcessingManager.add(LIGHTSABER_POST_SHADER);
+                } else if (postProcessingManager.isActive(LIGHTSABER_POST_SHADER)){
+                    postProcessingManager.remove(LIGHTSABER_POST_SHADER);
                 }
             }
         });
-    }
-
-    private static void makeBladeBloom(int outerColor){
-        try {
-            PostProcessingManager postProcessingManager = VeilRenderSystem.renderer().getPostProcessingManager();
-            PostPipeline pipeline = postProcessingManager.getPipeline(LIGHTSABER_POST_SHADER);
-            assert pipeline != null;
-            pipeline.getUniformSafe("u_OuterColor").setInt(outerColor);
-            postProcessingManager.runPipeline(pipeline);
-        } catch (Exception exception) {
-            Partium.LOG.error("Exception occurred ", exception);
-        }
     }
 }

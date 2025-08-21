@@ -1,5 +1,6 @@
 package de.abq.partium.client.renderer;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -61,6 +62,7 @@ public class LightsaberBladeRenderHelper {
         float bladeHeight = completeBladeLength - tip_length;
 
         RenderSystem.enableBlend();
+        RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
 
         /*
         //Outer Blade
@@ -206,6 +208,4 @@ public class LightsaberBladeRenderHelper {
         poseStack.popPose();
         return new Tuple<>(bufferSource, poseStack);
     }
-
-
 }
