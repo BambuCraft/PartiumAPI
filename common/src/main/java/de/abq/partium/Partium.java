@@ -69,20 +69,5 @@ public class Partium {
                 }
             }
         });
-
-        VeilEventPlatform.INSTANCE.preVeilPostProcessing((name, pipeline, context) -> {
-            VeilRenderer renderer = VeilRenderSystem.renderer();
-            ShaderPreDefinitions definitions = renderer.getShaderDefinitions();
-
-
-            if (name == LIGHTSABER_POST_SHADER){
-                /*CameraType camera = client.options.getCameraType();
-                if (camera.isFirstPerson()) {
-                    definitions.set("FIRST_PERSON");
-                } else if (definitions.getDefinition("FIRST_PERSON") != null) {
-                    definitions.remove("FIRST_PERSON");
-                }*/
-            }
-        });
     }
 }

@@ -1,7 +1,4 @@
 {
   "vertex": "veil:blit_screen",
-  "fragment": "partium:mix",
-  "definitions": [
-    "FIRST_PERSON"
-  ]
+  "fragment": "partium:mix"
 }

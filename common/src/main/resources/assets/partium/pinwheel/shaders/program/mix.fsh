@@ -1,11 +1,11 @@
-uniform sampler2D DiffuseSampler0; // scene color (backdrop)
-uniform sampler2D BladeSampler; // blade color (RGBA)
-uniform sampler2D HandSampler; // hand color (RGBA) — optional
-uniform sampler2D HandDepthSampler; // hand depth (0..1, NDC depth)
-uniform sampler2D MainDepthSampler; // main scene depth (0..1)
-uniform sampler2D ThirdPersonDepthSampler; // main scene depth (0..1)
-uniform sampler2D ThirdPersonSampler; // main scene depth (0..1)
-uniform sampler2D BladeDepthSampler; // blade depth (0..1)
+uniform sampler2D DiffuseSampler0;
+uniform sampler2D BladeSampler;
+uniform sampler2D HandSampler;
+uniform sampler2D HandDepthSampler;
+uniform sampler2D MainDepthSampler;
+uniform sampler2D ThirdPersonDepthSampler;
+uniform sampler2D ThirdPersonSampler;
+uniform sampler2D BladeDepthSampler;
 
 uniform int u_IsFirstPerson;
 
@@ -15,11 +15,11 @@ layout(location = 0) out vec4 fragColor;
 void main() {
     vec4 sceneCol = texture(DiffuseSampler0, texCoord);
     vec4 bladeCol = texture(BladeSampler, texCoord);
-    vec4 handCol = texture(HandSampler, texCoord);
+    vec4 handCol  = texture(HandSampler, texCoord);
 
-    float mainDepth = texture(MainDepthSampler, texCoord).r;
-    float bladeDepth =texture(BladeDepthSampler, texCoord).r;
-    float handDepth = texture(HandDepthSampler, texCoord).r;
+    float mainDepth  = texture(MainDepthSampler, texCoord).r;
+    float bladeDepth = texture(BladeDepthSampler, texCoord).r;
+    float handDepth  = texture(HandDepthSampler, texCoord).r;
 
     float eps = 1e-4;
 
