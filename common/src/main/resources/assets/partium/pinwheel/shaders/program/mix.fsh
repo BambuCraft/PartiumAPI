@@ -73,5 +73,5 @@ void main() {
         }
     }
 
-    fragColor = outColor;
+    fragColor = outColor; //texture(MainDepthSampler, texCoord);
 }
