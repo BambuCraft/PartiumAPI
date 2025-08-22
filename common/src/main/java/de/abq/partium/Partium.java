@@ -3,10 +3,13 @@ package de.abq.partium;
 import com.mojang.authlib.minecraft.client.MinecraftClient;
 import de.abq.partium.common.item.PartiumSwordItem;
 import foundry.veil.api.client.render.VeilRenderSystem;
+import foundry.veil.api.client.render.VeilRenderer;
 import foundry.veil.api.client.render.post.PostPipeline;
 import foundry.veil.api.client.render.post.PostProcessingManager;
+import foundry.veil.api.client.render.shader.ShaderPreDefinitions;
 import foundry.veil.api.event.VeilRenderLevelStageEvent;
 import foundry.veil.platform.VeilEventPlatform;
+import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
@@ -42,7 +45,8 @@ public class Partium {
         //makeLightsaberBladePost();
     }
 
-    public static final ResourceLocation LIGHTSABER_POST_SHADER = Partium.path("lightsaber_bloom");
+    public static final ResourceLocation LIGHTSABER_POST_SHADER = Partium.path("lightsaber_post");
+
     public static void commonClientSetup(){
         VeilEventPlatform.INSTANCE.onVeilRenderLevelStage((stage, levelRenderer, bufferSource, poseStack, projectionMatrix, renderTick, partialTicks, deltaTracker,camera, frustum) -> {
             if (stage == VeilRenderLevelStageEvent.Stage.AFTER_LEVEL){
@@ -54,13 +58,30 @@ public class Partium {
                 PostProcessingManager postProcessingManager = VeilRenderSystem.renderer().getPostProcessingManager();
                 PostPipeline pipeline = postProcessingManager.getPipeline(LIGHTSABER_POST_SHADER);
                 assert pipeline != null;
-                //pipeline.getUniformSafe("u_OuterColor").setInt(0xffffff);
+                int isFirstPerson = camera.isDetached() ? 0 : 1;
+                Partium.LOG.info("{}", isFirstPerson);
+                pipeline.getUniformSafe("u_IsFirstPerson").setInt(isFirstPerson);
                 if (main.getItem() instanceof PartiumSwordItem){
                     if (!postProcessingManager.isActive(LIGHTSABER_POST_SHADER))
                         postProcessingManager.add(LIGHTSABER_POST_SHADER);
                 } else if (postProcessingManager.isActive(LIGHTSABER_POST_SHADER)){
                     postProcessingManager.remove(LIGHTSABER_POST_SHADER);
                 }
+            }
+        });
+
+        VeilEventPlatform.INSTANCE.preVeilPostProcessing((name, pipeline, context) -> {
+            VeilRenderer renderer = VeilRenderSystem.renderer();
+            ShaderPreDefinitions definitions = renderer.getShaderDefinitions();
+
+
+            if (name == LIGHTSABER_POST_SHADER){
+                /*CameraType camera = client.options.getCameraType();
+                if (camera.isFirstPerson()) {
+                    definitions.set("FIRST_PERSON");
+                } else if (definitions.getDefinition("FIRST_PERSON") != null) {
+                    definitions.remove("FIRST_PERSON");
+                }*/
             }
         });
     }

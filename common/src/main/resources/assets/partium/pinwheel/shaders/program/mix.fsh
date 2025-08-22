@@ -7,6 +7,8 @@ uniform sampler2D ThirdPersonDepthSampler; // main scene depth (0..1)
 uniform sampler2D ThirdPersonSampler; // main scene depth (0..1)
 uniform sampler2D BladeDepthSampler; // blade depth (0..1)
 
+uniform int u_IsFirstPerson;
+
 in vec2 texCoord;
 layout(location = 0) out vec4 fragColor;
 
@@ -32,6 +34,7 @@ void main() {
     // - If blade is in front of main scene and hand, draw blade over them.
     // - If hand is in front of blade, draw hand over blade.
     // - Otherwise keep scene/backdrop.
+    /*
     if (bladeCol.a > 0.001) {
         if (handCol.a > 0.001) {
             if (bladeDepth + eps < handDepth) {
@@ -59,19 +62,37 @@ void main() {
                 float a = bladeCol.a;
                 outColor.rgb = src * a + outColor.rgb * (1.0 - a);
                 outColor.a = 1.0;
-            } else {
-                // Blade is behind scene geometry; leave scene color
-                // (Optionally, you might want a subtle glow behind objects — do nothing here)
             }
         }
-    } else {
-        // No blade visible; if hand exists, composite hand over scene
+    }*/
+
+    //Handle depth in main world
+    if (u_IsFirstPerson == 1) {
         if (bladeDepth + eps < handDepth) {
+            // Blade is closer than hand -> blade appears over hand
+            // Standard alpha composite blade over current outColor
+            vec3 src = bladeCol.rgb;
+            float a = bladeCol.a;
+            outColor.rgb = src * a + outColor.rgb * (1.0 - a);
+            outColor.a = 1.0;
+        } else {
+            // Hand is closer -> hand should occlude blade where hand alpha > 0
+            // Composite hand over scene (hand over backdrop), but keep blade visible where hand is transparent
+            // First draw blade into a temp color (blade over backdrop)
+            vec3 bladeOver = bladeCol.rgb * bladeCol.a + outColor.rgb * (1.0 - bladeCol.a);
+
+            // Then composite hand over that result
             float ha = handCol.a;
-            outColor.rgb = handCol.rgb * ha + outColor.rgb * (1.0 - ha);
+            outColor.rgb = handCol.rgb * ha + bladeOver * (1.0 - ha);
+            outColor.a = 1.0;
+        }
+    } else {
+        if (bladeDepth < mainDepth) {
+            vec3 src = bladeCol.rgb;
+            float a = bladeCol.a;
+            outColor.rgb = src * a + outColor.rgb * (1.0 - a);
             outColor.a = 1.0;
         }
     }
-
-    fragColor = outColor; //texture(MainDepthSampler, texCoord);
+    fragColor = outColor;
 }
