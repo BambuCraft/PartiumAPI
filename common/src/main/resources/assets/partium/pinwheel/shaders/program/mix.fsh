@@ -21,73 +21,26 @@ void main() {
     float bladeDepth =texture(BladeDepthSampler, texCoord).r;
     float handDepth = texture(HandDepthSampler, texCoord).r;
 
-    // Decide which fragment is in front at this pixel:
-    // smaller depth = closer to camera (assumes depth in [0,1], 0 = near)
-    // Tolerance to avoid z-fighting
     float eps = 1e-4;
 
-    // Start with scene backdrop as base
     vec4 outColor = sceneCol;
 
-    // If blade has alpha > 0, composite blade over backdrop/hand based on depth
-    // We'll composite in this order:
-    // - If blade is in front of main scene and hand, draw blade over them.
-    // - If hand is in front of blade, draw hand over blade.
-    // - Otherwise keep scene/backdrop.
-    /*
-    if (bladeCol.a > 0.001) {
-        if (handCol.a > 0.001) {
-            if (bladeDepth + eps < handDepth) {
-                // Blade is closer than hand -> blade appears over hand
-                // Standard alpha composite blade over current outColor
-                vec3 src = bladeCol.rgb;
-                float a = bladeCol.a;
-                outColor.rgb = src * a + outColor.rgb * (1.0 - a);
-                outColor.a = 1.0;
-            } else {
-                // Hand is closer -> hand should occlude blade where hand alpha > 0
-                // Composite hand over scene (hand over backdrop), but keep blade visible where hand is transparent
-                // First draw blade into a temp color (blade over backdrop)
-                vec3 bladeOver = bladeCol.rgb * bladeCol.a + outColor.rgb * (1.0 - bladeCol.a);
-
-                // Then composite hand over that result
-                float ha = handCol.a;
-                outColor.rgb = handCol.rgb * ha + bladeOver * (1.0 - ha);
-                outColor.a = 1.0;
-            }
-        } else {
-            // No hand: compare only with main scene (mainDepth typically represents world geometry)
-            if (bladeDepth + eps < mainDepth) {
-                vec3 src = bladeCol.rgb;
-                float a = bladeCol.a;
-                outColor.rgb = src * a + outColor.rgb * (1.0 - a);
-                outColor.a = 1.0;
-            }
-        }
-    }*/
-
-    //Handle depth in main world
     if (u_IsFirstPerson == 1) {
         if (bladeDepth + eps < handDepth) {
-            // Blade is closer than hand -> blade appears over hand
-            // Standard alpha composite blade over current outColor
+            //Infront of Hand
             vec3 src = bladeCol.rgb;
             float a = bladeCol.a;
             outColor.rgb = src * a + outColor.rgb * (1.0 - a);
             outColor.a = 1.0;
         } else {
-            // Hand is closer -> hand should occlude blade where hand alpha > 0
-            // Composite hand over scene (hand over backdrop), but keep blade visible where hand is transparent
-            // First draw blade into a temp color (blade over backdrop)
+            //Behind of Hand
             vec3 bladeOver = bladeCol.rgb * bladeCol.a + outColor.rgb * (1.0 - bladeCol.a);
-
-            // Then composite hand over that result
             float ha = handCol.a;
             outColor.rgb = handCol.rgb * ha + bladeOver * (1.0 - ha);
             outColor.a = 1.0;
         }
     } else {
-        if (bladeDepth < mainDepth) {
+        if (bladeDepth + eps < mainDepth) {
             vec3 src = bladeCol.rgb;
             float a = bladeCol.a;
             outColor.rgb = src * a + outColor.rgb * (1.0 - a);
