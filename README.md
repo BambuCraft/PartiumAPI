@@ -23,7 +23,7 @@ The following command should explain everything there is to know, colors are in 
 Specifying a color when using a blade model is currently unimplemented. 
 Further knowladge can be obtained in the [wiki](https://github.com/BambuCraft/PartiumAPI/wiki)
 
-```jsonc
+```json5
 /give @p partium:sword[
 	partium:parts = {
 	"blades":
