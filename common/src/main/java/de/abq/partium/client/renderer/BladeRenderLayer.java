@@ -33,24 +33,29 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
     @Override
     public void renderForBone(PoseStack poseStack, PartiumSwordItem animatable, GeoBone bone, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
         if (!shouldRender && blades == null) return;
-        for (GeoBone blade_joint : this.bones ){
+        for ( GeoBone blade_joint : this.bones ){
+
+            /* TODO: factor `bladeData` out to global variables.
+             *   Change only on slot change.
+             *   Global variables for main- and offhand
+             *   Convert color when reading to int
+             */
+
             Optional<BladesPart.Blade> bladeDataOpt = blades.getByString(blade_joint.getName());
             if (bladeDataOpt.isEmpty()) continue;
             BladesPart.Blade bladeData = bladeDataOpt.get();
 
-            if (primaryInnerColor == -1 && blade_joint.getName().equals("primary"))
-                primaryInnerColor = Util.HexStringToIntARGB(bladeData.innerColor());
-            if (primaryOuterColor == -1 && blade_joint.getName().equals("primary"))
-                primaryOuterColor = Util.HexStringToIntARGB(bladeData.outerColor());
-
             if (bladeData.model().getPath().isBlank() || bladeData.model().getNamespace().isBlank()){
+                primaryInnerColor = Util.HexStringToIntARGB(bladeData.innerColor());
+
                 boolean isBladeFineCut = bladeData.fine_cut();
-                boolean isBladeCracked = bladeData.cracked();
+                boolean isBladeCracked = bladeData.cracked(); //TODO: Not handled yet (prob, tessellation)
 
                 Tuple<MultiBufferSource, PoseStack> blade = LightsaberBladeRenderHelper.render(
                         bufferSource, poseStack, blade_joint, bladeData.length() * 2,
-                        primaryOuterColor, primaryInnerColor,
-                        this.emitterLocation, this.parentScale, isBladeFineCut, isBladeCracked);
+                        primaryInnerColor,
+                        this.emitterLocation, this.parentScale, isBladeFineCut, isBladeCracked
+                );
 
                 bufferSource = blade.getA();
                 poseStack = blade.getB();
