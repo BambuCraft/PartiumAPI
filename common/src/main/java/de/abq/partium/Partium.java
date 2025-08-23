@@ -39,12 +39,6 @@ public class Partium {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, location);
     }
 
-    public static void onCommonRenderHandPost(ItemStack itemStack){
-        //Make more common, move to right methods
-        //if (!(itemStack.getItem() instanceof PartiumSwordItem) ) return;
-        //makeLightsaberBladePost();
-    }
-
     public static final ResourceLocation LIGHTSABER_POST_SHADER = Partium.path("lightsaber_post");
 
     public static void commonClientSetup(){
@@ -54,14 +48,13 @@ public class Partium {
                 LocalPlayer player = instance.player;
                 if (player == null) return;
                 ItemStack main = player.getItemInHand(InteractionHand.MAIN_HAND);
-                //ItemStack off = player.getItemInHand(InteractionHand.OFF_HAND);
+                ItemStack off = player.getItemInHand(InteractionHand.OFF_HAND);
                 PostProcessingManager postProcessingManager = VeilRenderSystem.renderer().getPostProcessingManager();
                 PostPipeline pipeline = postProcessingManager.getPipeline(LIGHTSABER_POST_SHADER);
                 assert pipeline != null;
                 int isFirstPerson = camera.isDetached() ? 0 : 1;
-                Partium.LOG.info("{}", isFirstPerson);
                 pipeline.getUniformSafe("u_IsFirstPerson").setInt(isFirstPerson);
-                if (main.getItem() instanceof PartiumSwordItem){
+                if (main.getItem() instanceof PartiumSwordItem || off.getItem() instanceof PartiumSwordItem){
                     if (!postProcessingManager.isActive(LIGHTSABER_POST_SHADER))
                         postProcessingManager.add(LIGHTSABER_POST_SHADER);
                 } else if (postProcessingManager.isActive(LIGHTSABER_POST_SHADER)){
