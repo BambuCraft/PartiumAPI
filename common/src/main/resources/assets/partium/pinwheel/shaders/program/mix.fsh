@@ -13,7 +13,7 @@ in vec2 texCoord;
 layout(location = 0) out vec4 fragColor;
 
 void main() {
-    vec4 sceneCol = texture(DiffuseSampler0, texCoord);
+    vec4 outColor = texture(DiffuseSampler0, texCoord);
     vec4 bladeCol = texture(BladeSampler, texCoord);
     vec4 handCol  = texture(HandSampler, texCoord);
 
@@ -22,8 +22,6 @@ void main() {
     float handDepth  = texture(HandDepthSampler, texCoord).r;
 
     float eps = 1e-4;
-
-    vec4 outColor = sceneCol;
 
     if (u_IsFirstPerson == 1) {
         if (bladeDepth + eps < handDepth) {
