@@ -2,6 +2,13 @@
   "stages": [
     {
       "type": "veil:blit",
+      "shader": "partium:lightsaber_bloom",
+      "in": "partium:lightsaber_fb",
+      "out": "partium:lightsaber_bloom_fb",
+      "clear": false
+    },
+    {
+      "type": "veil:blit",
       "shader": "partium:mix",
       "in": "minecraft:main",
       "out": "veil:post",
@@ -9,15 +16,10 @@
     }
   ],
   "depth": true,
-  "framebuffers": {
-    "mix": {
-      "depth": true
-    }
-  },
   "textures": {
     "BladeSampler": {
       "type": "framebuffer",
-      "name": "partium:lightsaber_fb"
+      "name": "partium:lightsaber_bloom_fb"
     },
     "HandSampler": {
       "type": "framebuffer",

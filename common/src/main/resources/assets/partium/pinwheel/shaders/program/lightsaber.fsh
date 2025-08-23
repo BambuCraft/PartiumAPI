@@ -1,4 +1,5 @@
 #include partium:color
+#include veil:light
 
 in vec2 texCoord0;
 

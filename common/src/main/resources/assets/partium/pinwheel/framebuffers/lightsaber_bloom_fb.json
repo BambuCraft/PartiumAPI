@@ -1,0 +1,14 @@
+{
+  "width": "q.screen_width",
+  "height": "q.screen_height",
+  "autoClear": true,
+  "color_buffers": [
+    {
+      "type": "texture",
+      "format": "RGBA8",
+      "levels": 0,
+      "linear": false
+    }
+  ],
+  "depth": true
+}
