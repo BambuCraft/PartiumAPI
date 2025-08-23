@@ -2,22 +2,52 @@
   "stages": [
     {
       "type": "veil:blit",
-      "shader": "partium:lightsaber_bloom",
+      "shader": "partium:lightsaber_blade/blur",
       "in": "partium:lightsaber_fb",
       "out": "partium:lightsaber_bloom_fb",
       "clear": false
     },
     {
       "type": "veil:blit",
-      "shader": "partium:mix",
+      "shader": "partium:lightsaber_blade/blur",
+      "in": "partium:lightsaber_bloom_fb",
+      "out": "swap",
+      "clear": false
+    },
+    {
+      "type": "veil:blit",
+      "shader": "partium:lightsaber_blade/blur",
+      "in": "partium:lightsaber_fb",
+      "out": "partium:lightsaber_bloom_fb",
+      "clear": false
+    },
+    {
+      "type": "veil:blit",
+      "shader": "partium:lightsaber_blade/mix",
       "in": "minecraft:main",
       "out": "veil:post",
       "clear": false
     }
   ],
+  "framebuffers": {
+    "swap": {
+      "width": "q.screen_width/2",
+      "height": "q.screen_height/2",
+      "depth": true,
+      "linear": true
+    }
+  },
   "depth": true,
   "textures": {
+    "BladeBloomMaskSampler": {
+      "type": "location",
+      "location": "partium:textures/misc/lightsaber_blade_glow.png"
+    },
     "BladeSampler": {
+      "type": "framebuffer",
+      "name": "partium:lightsaber_fb"
+    },
+    "BladeBlurSampler": {
       "type": "framebuffer",
       "name": "partium:lightsaber_bloom_fb"
     },

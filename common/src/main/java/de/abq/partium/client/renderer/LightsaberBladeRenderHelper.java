@@ -20,11 +20,11 @@ import org.joml.Vector3f;
 import software.bernie.geckolib.cache.object.GeoBone;
 
 public class LightsaberBladeRenderHelper {
-    private static final ResourceLocation BLADE_SHADER_ID = Partium.path("lightsaber");
+    private static final ResourceLocation BLADE_SHADER_ID = Partium.path("lightsaber_blade/core");
 
     static Tuple<MultiBufferSource, PoseStack> render(
             MultiBufferSource bufferSource, PoseStack poseStack, GeoBone blade_joint,
-            float completeBladeLength, int outerColor, int innerColor,
+            float completeBladeLength, int innerColor,
             Vector3f emitterLocation, float parentScale, boolean isBladeFineCut, boolean isBladeCracked
     ){
         poseStack.pushPose();
@@ -62,6 +62,7 @@ public class LightsaberBladeRenderHelper {
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
         RenderSystem.enableDepthTest();
+
         /*
         //Outer Blade
         VertexConsumer outerBuffer = bufferSource.getBuffer(RenderType.entityTranslucentEmissive(ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "textures/misc/lightsaber_blade_glow.png")));
@@ -139,7 +140,6 @@ public class LightsaberBladeRenderHelper {
             uInnerColor.setInt(innerColor);
         }
         //TODO: Find out how I can supply multiple uniforms.
-        //TODO: create a framebuffer and create a bloom effect for the lightsaber.
         shader.bind();
         VertexConsumer innerBuffer = bufferSource.getBuffer(veilType);
         // Bottom square
@@ -201,7 +201,7 @@ public class LightsaberBladeRenderHelper {
         innerBuffer.addVertex(matrix, 0f, bladeHeight + tip_length, 0f).setColor(innerColor).setUv(u, v).setLight(maxLight).setNormal(1f,1f,1f).setOverlay(OverlayTexture.NO_OVERLAY);
         innerBuffer.addVertex(matrix, inner_blade_thickness, bladeHeight, inner_blade_length).setColor(innerColor).setUv(u, v).setLight(maxLight).setNormal(1f,1f,1f).setOverlay(OverlayTexture.NO_OVERLAY);
         innerBuffer.addVertex(matrix, -inner_blade_thickness, bladeHeight, -inner_blade_length).setColor(innerColor).setUv(u, v).setLight(maxLight).setNormal(1f,1f,1f).setOverlay(OverlayTexture.NO_OVERLAY);
-        //Partium.makeLightsaberBladePost();
+
         ShaderProgram.unbind();
         poseStack.popPose();
         return new Tuple<>(bufferSource, poseStack);
