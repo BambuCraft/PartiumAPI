@@ -12,11 +12,9 @@ You can also add your own Models, Texture and Animations.
 2. [Dependencies](#requirments)
 3. [Why?](#why)
 
-### Repo strucure
-All branches with a version number should be buildable, the wip branch will have the latest changes, but there is no guarantie it will compile.
-
-### Future Features
-- better combat implementation
+#### Requirments:
+- [Geckolib](https://modrinth.com/mod/geckolib)
+- 
 
 ### How to use:
 The following command should explain everything there is to know, colors are in the hex format and blades can have an optional model. If a model is provided it will not render a lightsaber blade.
@@ -58,8 +56,16 @@ Further knowladge can be obtained in the [wiki](https://github.com/BambuCraft/Pa
 	
 ```
 
-#### Requirments:
- - [Geckolib](https://modrinth.com/mod/geckolib)
+### Usage in Mod:
+    implement the IPartiumItem interface, add the right partium component to your item.
+    ??You can also extend the renderer if you need anything more
+
+### Repo strucure
+All branches with a version number should be buildable, the wip branch will have the latest changes, but there is no guarantie it will compile.
+
+### Future Features
+- better combat implementation
+
 
 </br>
 </br>
