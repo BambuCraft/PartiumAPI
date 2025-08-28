@@ -2,7 +2,8 @@ package de.abq.partium.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import de.abq.partium.common.data_components.parts.BladesPart;
+import de.abq.partium.common.data_components.parts.BladePart;
+import de.abq.partium.common.data_components.parts.BladesPartComponent;
 import de.abq.partium.common.item.PartiumSwordItem;
 import de.abq.partium.util.Util;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
-    private BladesPart blades = null;
+    private List<BladePart> blades = null;
     private List<GeoBone> bones = new ArrayList<>();
     private Vector3f emitterLocation;
     private boolean shouldRender = true;
@@ -32,7 +33,7 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
 
     @Override
     public void renderForBone(PoseStack poseStack, PartiumSwordItem animatable, GeoBone bone, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
-        if (!shouldRender && blades == null) return;
+        if (!shouldRender || blades == null) return;
         for ( GeoBone blade_joint : this.bones ){
 
             /* TODO: factor `bladeData` out to global variables.
@@ -41,18 +42,18 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
              *   Convert color when reading to int
              */
 
-            Optional<BladesPart.Blade> bladeDataOpt = blades.getByString(blade_joint.getName());
+            Optional<BladesPartComponent.Blade> bladeDataOpt = blades.getByString(blade_joint.getName());
             if (bladeDataOpt.isEmpty()) continue;
-            BladesPart.Blade bladeData = bladeDataOpt.get();
+            BladesPartComponent.Blade bladeData = bladeDataOpt.get();
 
-            if (bladeData.model().getPath().isBlank() || bladeData.model().getNamespace().isBlank()){
-                primaryInnerColor = Util.HexStringToIntARGB(bladeData.innerColor());
+            if (bladeData.model() == null || bladeData.model().getPath().isBlank() || bladeData.model().getNamespace().isBlank()){
+                primaryInnerColor = Util.HexStringToIntARGB(bladeData.plasmaBlade().innerColor());
 
-                boolean isBladeFineCut = bladeData.fine_cut();
-                boolean isBladeCracked = bladeData.cracked(); //TODO: Not handled yet (prob, tessellation)
+                boolean isBladeFineCut = bladeData.plasmaBlade().fine_cut();
+                boolean isBladeCracked = bladeData.plasmaBlade().cracked(); //TODO: Not handled yet (prob, tessellation)
 
                 Tuple<MultiBufferSource, PoseStack> blade = LightsaberBladeRenderHelper.render(
-                        bufferSource, poseStack, blade_joint, bladeData.length() * 2,
+                        bufferSource, poseStack, blade_joint, bladeData.plasmaBlade().length() * 2,
                         primaryInnerColor,
                         this.emitterLocation, this.parentScale, isBladeFineCut, isBladeCracked
                 );
@@ -68,10 +69,10 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
         super.renderForBone(poseStack, animatable, bone, renderType, bufferSource, buffer, partialTick, packedLight, packedOverlay);
     }
 
-    public BladesPart getBlades() {
+    public List<BladePart> getBlades() {
         return blades;
     }
-    public void setBlades(BladesPart blades) {
+    public void setBlades(List<BladePart> blades) {
         this.blades = blades;
     }
 

@@ -1,11 +1,12 @@
 package de.abq.partium.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.datafixers.util.Either;
 import de.abq.partium.Partium;
 import de.abq.partium.client.model.DynamicItemModel;
 import de.abq.partium.common.data_components.PartiumDataComponents;
 import de.abq.partium.common.data_components.PartsComponents;
-import de.abq.partium.common.data_components.parts.BladesPart;
+import de.abq.partium.common.data_components.parts.BladesPartComponent;
 import de.abq.partium.common.data_components.parts.ModelPart;
 import de.abq.partium.common.item.PartiumSwordItem;
 import de.abq.partium.util.CheckedResourceLocation;
@@ -23,6 +24,7 @@ import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.model.DefaultedItemGeoModel;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
 
+import java.util.List;
 import java.util.Optional;
 
 public class SwordRenderer extends GeoItemRenderer<PartiumSwordItem> {
@@ -30,6 +32,8 @@ public class SwordRenderer extends GeoItemRenderer<PartiumSwordItem> {
     private final ModelRenderLayer<PartiumSwordItem> emitterRenderLayer = new ModelRenderLayer<>(this, "emitter");
     private final ModelRenderLayer<PartiumSwordItem> pommelRenderLayer = new ModelRenderLayer<>(this, "pommel");
     private final ModelRenderLayer<PartiumSwordItem> guardRenderLayer = new ModelRenderLayer<>(this, "guard");
+
+    public static final String ANCHOR_ROOT = "bb_main";
 
     private BakedGeoModel gripModel = null;
     private boolean gripChange = true;
@@ -64,7 +68,7 @@ public class SwordRenderer extends GeoItemRenderer<PartiumSwordItem> {
                 Partium.LOG.warn("parts == null");
                 return;
             }
-            BladesPart bladesData = parts.blades();
+            List<Either<BladesPartComponent.Blade, BladesPartComponent.SimpleBlade>> bladesData = parts.blades();
             ModelPart emitterData = parts.emitter();
             ModelPart guardData = parts.guard();
             ModelPart gripData = parts.grip();
@@ -75,7 +79,7 @@ public class SwordRenderer extends GeoItemRenderer<PartiumSwordItem> {
                 this.gripModel = localGripModel.getBakedModel(localGripModel.getModelResource(animatable));
                 BakedGeoModel rootModel = model.getBakedModel(this.model.getModelResource((PartiumSwordItem) stack.getItem()));
                 this.gripChange = false;
-                this.gripModel.getBone("bb_main").ifPresent(gripBone -> {
+                this.gripModel.getBone(ANCHOR_ROOT).ifPresent(gripBone -> {
                     Optional<GeoBone> rootBone = rootModel.getBone("root");
                     if (rootBone.isEmpty()) {
                         Partium.LOG.info("No root bone found in {}", this.animatable);

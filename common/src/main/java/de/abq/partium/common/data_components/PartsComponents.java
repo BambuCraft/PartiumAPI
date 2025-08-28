@@ -1,8 +1,10 @@
 package de.abq.partium.common.data_components;
 
+import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import de.abq.partium.common.data_components.parts.BladesPart;
+import de.abq.partium.common.data_components.parts.BladePart;
+import de.abq.partium.common.data_components.parts.BladesPartComponent;
 import de.abq.partium.common.data_components.parts.ModelPart;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -13,15 +15,18 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipProvider;
 
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
-public record PartsComponents(ModelPart emitter, ModelPart guard, ModelPart grip, ModelPart pommel, BladesPart blades) implements TooltipProvider {
+public record PartsComponents(ModelPart emitter, ModelPart guard, ModelPart grip, ModelPart pommel, Map<String, Either<BladesPartComponent.Blade, BladesPartComponent.SimpleBlade>> blades) implements TooltipProvider {
     public static final PartsComponents DEFAULT = new PartsComponents(
             ModelPart.DEFAULT,
             ModelPart.DEFAULT,
             ModelPart.DEFAULT,
             ModelPart.DEFAULT,
-            BladesPart.DEFAULT
+            null
     );
 
     public static final Codec<PartsComponents> CODEC = RecordCodecBuilder.create(instance ->
@@ -30,7 +35,7 @@ public record PartsComponents(ModelPart emitter, ModelPart guard, ModelPart grip
                     ModelPart.CODEC.optionalFieldOf("guard", ModelPart.DEFAULT).forGetter(PartsComponents::guard),
                     ModelPart.CODEC.optionalFieldOf("grip", ModelPart.DEFAULT).forGetter(PartsComponents::grip),
                     ModelPart.CODEC.optionalFieldOf("pommel", ModelPart.DEFAULT).forGetter(PartsComponents::pommel),
-                    BladesPart.CODEC.optionalFieldOf("blades", BladesPart.DEFAULT).forGetter(PartsComponents::blades)
+                    Codec.unboundedMap(Codec.STRING, BladesPartComponent.CODEC).optionalFieldOf("blades", null).forGetter(PartsComponents::blades)
             ).apply(instance, PartsComponents::new)
     );
     public static final StreamCodec<RegistryFriendlyByteBuf, PartsComponents> STREAM_CODEC = StreamCodec.composite(
@@ -38,7 +43,7 @@ public record PartsComponents(ModelPart emitter, ModelPart guard, ModelPart grip
             ByteBufCodecs.fromCodec(ModelPart.CODEC), PartsComponents::guard,
             ByteBufCodecs.fromCodec(ModelPart.CODEC), PartsComponents::grip,
             ByteBufCodecs.fromCodec(ModelPart.CODEC), PartsComponents::pommel,
-            ByteBufCodecs.fromCodec(BladesPart.CODEC), PartsComponents::blades,
+            ByteBufCodecs.fromCodec(Codec.unboundedMap(Codec.STRING, BladesPartComponent.CODEC)), PartsComponents::blades,
             PartsComponents::new
     );
     // Unit stream codec if nothing should be sent across the network

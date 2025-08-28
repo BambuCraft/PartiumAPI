@@ -6,7 +6,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import de.abq.partium.Partium;
-import de.abq.partium.common.data_components.parts.BladesPart;
+import de.abq.partium.common.data_components.parts.BladesPartComponent;
 import de.abq.partium.common.item.PartiumSwordItem;
 import de.abq.partium.util.Util;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class BladeRenderLayerBK extends ModelRenderLayer<PartiumSwordItem>{
-    private BladesPart blades = null;
+    private BladesPartComponent blades = null;
     private List<GeoBone> bones = new ArrayList<>();
     private Vector3f emitterLocation;
     private boolean shouldRender = true;
@@ -45,9 +45,9 @@ public class BladeRenderLayerBK extends ModelRenderLayer<PartiumSwordItem>{
     public void renderForBone(PoseStack poseStack, PartiumSwordItem animatable, GeoBone bone, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
         if (!shouldRender || blades == null) return;
         for (GeoBone blade_joint : this.bones) {
-            Optional<BladesPart.Blade> bladeDataOpt = blades.getByString(blade_joint.getName());
+            Optional<BladesPartComponent.Blade> bladeDataOpt = blades.getByString(blade_joint.getName());
             if (bladeDataOpt.isEmpty()) continue;
-            BladesPart.Blade bladeData = bladeDataOpt.get();
+            BladesPartComponent.Blade bladeData = bladeDataOpt.get();
             isBladeFineCut = bladeData.fine_cut();
             isBladeCracked = bladeData.cracked();
 
@@ -233,10 +233,10 @@ public class BladeRenderLayerBK extends ModelRenderLayer<PartiumSwordItem>{
         return 1-1f;
     }
 
-    public BladesPart getBlades() {
+    public BladesPartComponent getBlades() {
         return blades;
     }
-    public void setBlades(BladesPart blades) {
+    public void setBlades(BladesPartComponent blades) {
         this.blades = blades;
     }
 
