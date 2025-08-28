@@ -19,10 +19,8 @@ public class PartiumFabric implements ModInitializer {
     public void onInitialize() {
         Partium.init();
 
-
         bindItems( ZItems::registerItems );
         bindDataComponents( PartiumDataComponents::register );
-
     }
 
     private void bindItems(Consumer<BiConsumer<Item, ResourceLocation>> source){

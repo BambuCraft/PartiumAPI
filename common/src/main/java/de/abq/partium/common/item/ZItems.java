@@ -20,6 +20,7 @@ public class ZItems {
     public static final Item SWORD = build("sword", new PartiumSwordItem(Tiers.NETHERITE, DEFAULT_PROPERTIES));
 
     // Not Working
+    /*
     public static final Item PICKAXE = build("pickaxe", new PartiumPickaxeItem(Tiers.NETHERITE, DEFAULT_PROPERTIES));
     public static final Item AXE = build("axe", new PartiumAxeItem(Tiers.NETHERITE, DEFAULT_PROPERTIES));
     public static final Item HOE = build("hoe", new PartiumHoeItem(Tiers.NETHERITE, DEFAULT_PROPERTIES));
@@ -30,6 +31,7 @@ public class ZItems {
 
     public static final Item BOW = new PartiumBowItem(DEFAULT_PROPERTIES);
     public static final Item CROSSBOW = new PartiumCrossbowItem(DEFAULT_PROPERTIES);
+    */
 
     private static Item build(String id, Item item){
         ITEMS.put(Partium.path(id), item);
@@ -40,6 +42,7 @@ public class ZItems {
         register.accept(SWORD, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "sword"));
 
         //NEEDS WORK
+        /*
          register.accept(PICKAXE, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "pickaxe"));
          register.accept(AXE, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "axe"));
          register.accept(HOE, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "hoe"));
@@ -48,5 +51,6 @@ public class ZItems {
          register.accept(MACE, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "mace"));
          register.accept(BOW, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "bow"));
          register.accept(CROSSBOW, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "crossbow"));
+         */
     }
 }

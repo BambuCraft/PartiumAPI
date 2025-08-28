@@ -24,7 +24,7 @@ public class PartiumNF {
             bindItems( event, ZItems::registerItems );
         });
         eventBus.addListener((FMLClientSetupEvent event) -> {
-            Partium.commonClientSetup();
+            //Partium.commonClientSetup();
         });
     }
     private void bindItems(RegisterEvent event, Consumer<BiConsumer<Item, ResourceLocation>> source){
