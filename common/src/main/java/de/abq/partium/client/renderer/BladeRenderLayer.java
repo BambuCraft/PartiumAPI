@@ -2,21 +2,21 @@ package de.abq.partium.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import de.abq.partium.Partium;
 import de.abq.partium.common.data_components.parts.BladesPart;
 import de.abq.partium.common.item.PartiumSwordItem;
 import de.abq.partium.util.Util;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Tuple;
 import org.joml.Vector3f;
-import software.bernie.geckolib.cache.object.*;
+import software.bernie.geckolib.cache.object.GeoBone;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 
 public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
-    private static final ResourceLocation BLADE_SHADER_ID = Partium.path("lightsaber");
     private BladesPart blades = null;
     private List<GeoBone> bones = new ArrayList<>();
     private Vector3f emitterLocation;

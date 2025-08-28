@@ -2,35 +2,18 @@
 #include veil:space_helper
 
 uniform sampler2D DiffuseSampler0;
-uniform sampler2D LightSampler;
+uniform sampler2D BladeSampler;
+uniform vec2 OutSize;
+//uniform float GlowStrength;         // overall glow multiplier, e.g. 1.0
+//uniform float GlowSpread;           // how wide the glow is (0..1), e.g. 0.6
+//uniform vec3 GlowColor;             // tint color (e.g. vec3(0.0, 0.6, 1.0))
 
 in vec2 texCoord;
 out vec4 fragColor;
 
-void main() {
-    int Radius = 5;
-    vec2 BlurDir = vec2(0,1);
-    vec2 oneTexel = vec2(0,1);
-
-    vec4 blurred = vec4(0.0);
-    float totalStrength = 0.0;
-    for(float r = -Radius; r <= Radius; r += 1.0) {
-        float strength = abs(1.0 - r / Radius);
-        strength = strength * strength;
-        totalStrength = totalStrength + strength;
-        blurred = blurred + texture2D(DiffuseSampler0, texCoord + oneTexel * r * BlurDir) * strength;
-    }
-    fragColor = vec4(blurred.rgb / totalStrength, texture2D(DiffuseSampler0, texCoord).a);
-}
-uniform sampler2D DiffuseSampler0; // original blade (alpha = blade)
-uniform sampler2D DiffuseSampler1; // blurred blade (RGB)
-uniform vec2 OutSize;               // screen size in px (optional)
-uniform float GlowStrength;         // overall glow multiplier, e.g. 1.0
-uniform float GlowSpread;           // how wide the glow is (0..1), e.g. 0.6
-uniform vec3 GlowColor;             // tint color (e.g. vec3(0.0, 0.6, 1.0))
-
-in vec2 texCoord;
-out vec4 fragColor;
+const vec3  GlowColor    = vec3(0,0,1.0);
+const float GlowSpread   = 0.6;
+const float GlowStrength = 1.0;
 
 float linearStep(float edge0, float edge1, float x) {
     return clamp((x - edge0) / (edge1 - edge0), 0.0, 1.0);
@@ -39,7 +22,7 @@ float linearStep(float edge0, float edge1, float x) {
 void main() {
     // base samples
     vec4 base = texture(DiffuseSampler0, texCoord);    // original blade (RGBA)
-    vec3 blur = texture(DiffuseSampler1, texCoord).rgb; // blurred RGB
+    vec3 blur = texture(BladeSampler, texCoord).rgb; // blurred RGB
 
     // Use alpha of base to find how close we are to blade center.
     // alpha = 1.0 on blade, 0.0 elsewhere. We want glow strongest near blade and fade out.

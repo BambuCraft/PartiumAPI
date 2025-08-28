@@ -7,14 +7,8 @@
   "outline": false,
   "layers": [
     {
-      "type": "minecraft:texture",
-      "texture": "%1$s",
-      "blur": true,
-      "mipmap": false
-    },
-    {
       "type": "veil:shader",
-      "name": "partium:lightsaber"
+      "name": "partium:lightsaber_blade/core"
     },
     {
       "type": "minecraft:lightmap"

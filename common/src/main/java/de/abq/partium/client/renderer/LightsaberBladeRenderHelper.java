@@ -20,6 +20,7 @@ import org.joml.Vector3f;
 import software.bernie.geckolib.cache.object.GeoBone;
 
 public class LightsaberBladeRenderHelper {
+    private static final ResourceLocation BLADE_RENDERTYPE_ID = Partium.path("lightsaber");
     private static final ResourceLocation BLADE_SHADER_ID = Partium.path("lightsaber_blade/core");
 
     static Tuple<MultiBufferSource, PoseStack> render(
@@ -123,12 +124,13 @@ public class LightsaberBladeRenderHelper {
         //Inner Blade
 
         //VertexConsumer innerBuffer = bufferSource.getBuffer(RenderType.entityTranslucentEmissive(ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "textures/misc/lightsaber_blade.png"), false));
-        RenderType veilType = VeilRenderType.get(BLADE_SHADER_ID, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "textures/misc/lightsaber_blade.png"));
+        RenderType veilType = VeilRenderType.get(BLADE_RENDERTYPE_ID);
         if (veilType == null) {
-            Partium.LOG.error("Error loading RenderType {}", BLADE_SHADER_ID);
+            Partium.LOG.error("Error loading RenderType {}", BLADE_RENDERTYPE_ID);
             return new Tuple<>(bufferSource, poseStack);
         }
         ShaderProgram shader = VeilRenderSystem.setShader(BLADE_SHADER_ID);
+        //ShaderProgram shader = VeilRenderSystem.getShader();
         if (shader == null) {
             Partium.LOG.error("Error loading Shader {}", BLADE_SHADER_ID);
             return new Tuple<>(bufferSource, poseStack);

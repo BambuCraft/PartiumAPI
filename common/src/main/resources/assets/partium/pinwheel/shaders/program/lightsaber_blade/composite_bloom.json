@@ -1,0 +1,4 @@
+{
+  "vertex": "veil:blit_screen",
+  "fragment": "partium:lightsaber_blade/composite_bloom"
+}
