@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public record PartsComponents(ModelPart emitter, ModelPart guard, ModelPart grip, ModelPart pommel, Map<String, Either<BladesPartComponent.Blade, BladesPartComponent.SimpleBlade>> blades) implements TooltipProvider {
+public record PartsComponents(ModelPart emitter, ModelPart guard, ModelPart grip, ModelPart pommel, Map<String, Either<BladesPartComponent.Blade, BladesPartComponent.PlasmaBlade>> blades) implements TooltipProvider {
     public static final PartsComponents DEFAULT = new PartsComponents(
             ModelPart.DEFAULT,
             ModelPart.DEFAULT,
@@ -35,14 +35,14 @@ public record PartsComponents(ModelPart emitter, ModelPart guard, ModelPart grip
                     ModelPart.CODEC.optionalFieldOf("guard", ModelPart.DEFAULT).forGetter(PartsComponents::guard),
                     ModelPart.CODEC.optionalFieldOf("grip", ModelPart.DEFAULT).forGetter(PartsComponents::grip),
                     ModelPart.CODEC.optionalFieldOf("pommel", ModelPart.DEFAULT).forGetter(PartsComponents::pommel),
-                    Codec.unboundedMap(Codec.STRING, BladesPartComponent.CODEC).optionalFieldOf("blades", null).forGetter(PartsComponents::blades)
+                    Codec.unboundedMap(Codec.STRING, BladesPartComponent.CODEC).optionalFieldOf("blades", Map.of()).forGetter(PartsComponents::blades)
             ).apply(instance, PartsComponents::new)
     );
     public static final StreamCodec<RegistryFriendlyByteBuf, PartsComponents> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.fromCodec(ModelPart.CODEC), PartsComponents::emitter,
-            ByteBufCodecs.fromCodec(ModelPart.CODEC), PartsComponents::guard,
-            ByteBufCodecs.fromCodec(ModelPart.CODEC), PartsComponents::grip,
-            ByteBufCodecs.fromCodec(ModelPart.CODEC), PartsComponents::pommel,
+            ModelPart.STREAM_CODEC, PartsComponents::emitter,
+            ModelPart.STREAM_CODEC, PartsComponents::guard,
+            ModelPart.STREAM_CODEC, PartsComponents::grip,
+            ModelPart.STREAM_CODEC, PartsComponents::pommel,
             ByteBufCodecs.fromCodec(Codec.unboundedMap(Codec.STRING, BladesPartComponent.CODEC)), PartsComponents::blades,
             PartsComponents::new
     );

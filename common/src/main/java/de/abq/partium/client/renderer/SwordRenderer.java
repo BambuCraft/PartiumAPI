@@ -1,12 +1,11 @@
 package de.abq.partium.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.datafixers.util.Either;
 import de.abq.partium.Partium;
 import de.abq.partium.client.model.DynamicItemModel;
 import de.abq.partium.common.data_components.PartiumDataComponents;
 import de.abq.partium.common.data_components.PartsComponents;
-import de.abq.partium.common.data_components.parts.BladesPartComponent;
+import de.abq.partium.common.data_components.parts.BladePart;
 import de.abq.partium.common.data_components.parts.ModelPart;
 import de.abq.partium.common.item.PartiumSwordItem;
 import de.abq.partium.util.CheckedResourceLocation;
@@ -24,7 +23,7 @@ import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.model.DefaultedItemGeoModel;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
 
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class SwordRenderer extends GeoItemRenderer<PartiumSwordItem> {
@@ -68,7 +67,8 @@ public class SwordRenderer extends GeoItemRenderer<PartiumSwordItem> {
                 Partium.LOG.warn("parts == null");
                 return;
             }
-            List<Either<BladesPartComponent.Blade, BladesPartComponent.SimpleBlade>> bladesData = parts.blades();
+            Map<String, BladePart> bladesData = BladePart.into(parts.blades());
+
             ModelPart emitterData = parts.emitter();
             ModelPart guardData = parts.guard();
             ModelPart gripData = parts.grip();
@@ -119,6 +119,7 @@ public class SwordRenderer extends GeoItemRenderer<PartiumSwordItem> {
                 model.getBone("joint_pommel").get().setRotZ(this.gripModel.getBone("joint_pommel").get().getRotZ());
             }
 
+            //TODO: convert to simple class
             if (this.bladeRenderLayer.getBlades() != bladesData) {
                 this.bladeRenderLayer.setBlades(bladesData);
             }
