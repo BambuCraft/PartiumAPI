@@ -94,6 +94,7 @@ public class SwordRenderer extends GeoItemRenderer<PartiumSwordItem> {
                     gripBone.markPositionAsChanged();
                 });
 
+                //TODO: do not crash if not pressent
                 model.getBone("joint_emitter").get().setPivotX(this.gripModel.getBone("joint_emitter").get().getPivotX() + .13f);
                 model.getBone("joint_emitter").get().setPivotY(this.gripModel.getBone("joint_emitter").get().getPivotY() - .13f);
                 model.getBone("joint_emitter").get().setPivotZ(this.gripModel.getBone("joint_emitter").get().getPivotZ() + .5f);
@@ -110,9 +111,9 @@ public class SwordRenderer extends GeoItemRenderer<PartiumSwordItem> {
                 model.getBone("joint_emitter").get().setRotY(this.gripModel.getBone("joint_emitter").get().getRotY());
                 model.getBone("joint_emitter").get().setRotZ(this.gripModel.getBone("joint_emitter").get().getRotZ());
 
-                model.getBone("joint_guard").get().setRotX(this.gripModel.getBone("joint_guard").get().getRotX());
-                model.getBone("joint_guard").get().setRotY(this.gripModel.getBone("joint_guard").get().getRotY());
-                model.getBone("joint_guard").get().setRotZ(this.gripModel.getBone("joint_guard").get().getRotZ());
+//                model.getBone("joint_blade").get().setRotX(this.gripModel.getBone("joint_blade").get().getRotX());
+//                model.getBone("joint_blade").get().setRotY(this.gripModel.getBone("joint_blade").get().getRotY());
+//                model.getBone("joint_blade").get().setRotZ(this.gripModel.getBone("joint_blade").get().getRotZ());
 
                 model.getBone("joint_pommel").get().setRotX(this.gripModel.getBone("joint_pommel").get().getRotX());
                 model.getBone("joint_pommel").get().setRotY(this.gripModel.getBone("joint_pommel").get().getRotY());
@@ -150,15 +151,16 @@ public class SwordRenderer extends GeoItemRenderer<PartiumSwordItem> {
         this.guardRenderLayer.setGUIRender(renderPerspective == ItemDisplayContext.GUI);
         this.pommelRenderLayer.setGUIRender(renderPerspective == ItemDisplayContext.GUI);
 
+        /*
         if (renderPerspective == ItemDisplayContext.GUI){
             //TODO: FIX!!!!!! (Make a triangle to indicate the inner and outer color )
-            bufferSource.getBuffer(renderType).addVertex(-1,-1,-1).setLight(0xF000F0).setColor(this.bladeRenderLayer.getPrimaryOuterColor()).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1,1,1).setUv(0,0);
-            bufferSource.getBuffer(renderType).addVertex(0f,0f,0).setLight(0xF000F0).setColor(this.bladeRenderLayer.getPrimaryOuterColor()).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1,1,1).setUv(0,0);
-            bufferSource.getBuffer(renderType).addVertex(1f,1f,1).setLight(0xF000F0).setColor(this.bladeRenderLayer.getPrimaryOuterColor()).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1,1,1).setUv(0,0);
-            //bufferSource.getBuffer(renderType).addVertex(matrix, 0.5f,0,0).setLight(0xF000F0).setColor(this.bladeRenderLayer.getPrimaryInnerColor()).setOverlay(packedOverlay).setNormal(1,1,1).setUv(0,0);
+           bufferSource.getBuffer(renderType).addVertex(-1,-1,-1).setLight(0xF000F0).setColor(this.bladeRenderLayer.getPrimaryOuterColor()).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1,1,1).setUv(0,0);
+           bufferSource.getBuffer(renderType).addVertex(0f,0f,0).setLight(0xF000F0).setColor(this.bladeRenderLayer.getPrimaryOuterColor()).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1,1,1).setUv(0,0);
+           bufferSource.getBuffer(renderType).addVertex(1f,1f,1).setLight(0xF000F0).setColor(this.bladeRenderLayer.getPrimaryOuterColor()).setOverlay(OverlayTexture.NO_OVERLAY).setNormal(1,1,1).setUv(0,0);
+           // //bufferSource.getBuffer(renderType).addVertex(matrix, 0.5f,0,0).setLight(0xF000F0).setColor(this.bladeRenderLayer.getPrimaryInnerColor()).setOverlay(packedOverlay).setNormal(1,1,1).setUv(0,0);
             //bufferSource.getBuffer(renderType).addVertex(matrix, 0,1,0).setLight(0xF000F0).setColor(this.bladeRenderLayer.getPrimaryInnerColor()).setOverlay(packedOverlay).setNormal(1,1,1).setUv(0,0);
             //bufferSource.getBuffer(renderType).addVertex(matrix, 1,1,0).setLight(0xF000F0).setColor(this.bladeRenderLayer.getPrimaryInnerColor()).setOverlay(packedOverlay).setNormal(1,1,1).setUv(0,0);
-        }
+        }*/
         super.renderByItem(stack, transformType, poseStack, bufferSource, packedLight, packedOverlay);
         this.isFixed = transformType == ItemDisplayContext.FIXED;
     }

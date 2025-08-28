@@ -1,0 +1,51 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.test_pommel",
+        "texture_width": 16,
+        "texture_height": 16,
+        "visible_bounds_width": 2,
+        "visible_bounds_height": 1.5,
+        "visible_bounds_offset": [0, 0.25, 0]
+      },
+      "bones": [
+        {
+          "name": "bb_main",
+          "pivot": [0, 0, 0],
+          "cubes": [
+            {
+              "origin": [-1, 1, -1],
+              "size": [2, 2, 2],
+              "uv": {
+                "north": {"uv": [0, 0], "uv_size": [2, 2]},
+                "east": {"uv": [0, 2], "uv_size": [2, 2]},
+                "south": {"uv": [2, 0], "uv_size": [2, 2]},
+                "west": {"uv": [2, 2], "uv_size": [2, 2]},
+                "up": {"uv": [0, 4], "uv_size": [2, 2]},
+                "down": {"uv": [4, 2], "uv_size": [2, -2]}
+              }
+            },
+            {
+              "origin": [-0.75, 0, -0.75],
+              "size": [1.5, 1, 1.5],
+              "uv": {
+                "north": {"uv": [4, 4], "uv_size": [2, 1]},
+                "east": {"uv": [4, 5], "uv_size": [2, 1]},
+                "south": {"uv": [0, 6], "uv_size": [2, 1]},
+                "west": {"uv": [6, 0], "uv_size": [2, 1]},
+                "up": {"uv": [2, 4], "uv_size": [2, 2]},
+                "down": {"uv": [4, 4], "uv_size": [2, -2]}
+              }
+            }
+          ]
+        },
+        {
+          "name": "pommel",
+          "pivot": [0, 3, 0]
+        }
+      ]
+    }
+  ]
+}

@@ -24,7 +24,7 @@ public class ModelRenderLayer<T extends GeoAnimatable> extends GeoRenderLayer<T>
     private ResourceLocation model;
     private float scale;
     protected float parentScale;
-    private final String joint_name;
+    private String joint_name;
     private boolean retryWholeDraw = true;
     private boolean retryTextureDraw = true;
     private boolean isGUIRender = false;
@@ -96,6 +96,10 @@ public class ModelRenderLayer<T extends GeoAnimatable> extends GeoRenderLayer<T>
     public void setModel(ResourceLocation model) {
         this.model = model;
     }
+    public void setJointName(String name){
+        this.joint_name = name;
+    }
+
     public void setScale(float scale) {
         this.scale = scale;
     }
@@ -117,5 +121,4 @@ public class ModelRenderLayer<T extends GeoAnimatable> extends GeoRenderLayer<T>
     public void setGUIRender(boolean GUIRender) {
         isGUIRender = GUIRender;
     }
-
 }

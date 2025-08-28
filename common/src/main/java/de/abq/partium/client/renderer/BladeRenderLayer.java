@@ -2,6 +2,7 @@ package de.abq.partium.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import de.abq.partium.Partium;
 import de.abq.partium.common.data_components.parts.BladePart;
 import de.abq.partium.common.item.PartiumSwordItem;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -43,6 +44,7 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
             BladePart bladeData = BladePart.getByString(blades, blade_joint.getName());
             if (bladeData == null) continue;
 
+            //TODO: Render both if model is not empty
             if (bladeData.model() == null || bladeData.model().getPath().isBlank() || bladeData.model().getNamespace().isBlank()){
                 primaryInnerColor = bladeData.plasmaBlade().innerColor();
                 boolean isBladeFineCut = bladeData.plasmaBlade().fineCut();
@@ -50,14 +52,14 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
 
                 Tuple<MultiBufferSource, PoseStack> blade = LightsaberBladeRenderHelper.render(
                         bufferSource, poseStack, blade_joint, bladeData.plasmaBlade().length() * 2,
-                        primaryInnerColor,
-                        this.emitterLocation, this.parentScale, isBladeFineCut, isBladeCracked
+                        primaryInnerColor, this.emitterLocation, this.parentScale, isBladeFineCut, isBladeCracked
                 );
 
                 bufferSource = blade.getA();
                 poseStack = blade.getB();
             } else {
                 setModel(bladeData.model());
+                setJointName("blade");
                 super.renderModel(poseStack, animatable, bone, renderType, bufferSource, buffer, partialTick, packedLight, packedOverlay);
             }
         }

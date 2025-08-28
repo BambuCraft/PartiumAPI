@@ -12,17 +12,17 @@ public class DynamicItemModel<T extends GeoAnimatable> extends GeoModel<T> {
 
     @Override
     public ResourceLocation getModelResource(T t) {
-        return resourceLocation.withPath("geo/partium/item/" + resourceLocation.getPath() + ".geo.json");
+        return ResourceLocation.fromNamespaceAndPath(resourceLocation.getNamespace(), "geo/partium/" + resourceLocation.getPath() + ".geo.json");
     }
 
     @Override
     public ResourceLocation getTextureResource(T t) {
-        return resourceLocation.withPath("textures/partium/item/" + resourceLocation.getPath() + ".png");
+        return ResourceLocation.fromNamespaceAndPath(resourceLocation.getNamespace(), "textures/partium/" + resourceLocation.getPath() + ".png");
     }
 
     @Override
     public ResourceLocation getAnimationResource(T t) {
-        return resourceLocation.withPath("animation/partium/item/" + resourceLocation.getPath() + ".animation.json");
+        return ResourceLocation.fromNamespaceAndPath(resourceLocation.getNamespace(), "animations/partium/" + resourceLocation.getPath() + ".animation.json");
     }
 
     public void setResourceLocation(ResourceLocation resourceLocation) {
