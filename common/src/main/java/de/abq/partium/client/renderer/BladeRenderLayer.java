@@ -59,7 +59,7 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
                 poseStack = blade.getB();
             } else {
                 setModel(bladeData.model());
-                setJointName("blade");
+                setJointName("blade"); /*ADDED LATER*/
                 super.renderModel(poseStack, animatable, bone, renderType, bufferSource, buffer, partialTick, packedLight, packedOverlay);
             }
         }
