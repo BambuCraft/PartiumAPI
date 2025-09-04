@@ -61,7 +61,7 @@ public class BladeRenderLayerBK extends ModelRenderLayer<PartiumSwordItem>{
                 bufferSource = blade.getA();
                 poseStack = blade.getB();
             } else {
-                setModel(bladeData.model());
+                setResource(bladeData.model());
                 super.renderModel(poseStack, animatable, bone, renderType, bufferSource, buffer, partialTick, packedLight, packedOverlay);
             }
         }

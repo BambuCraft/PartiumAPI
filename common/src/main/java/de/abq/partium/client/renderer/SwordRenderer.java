@@ -13,7 +13,6 @@ import de.abq.partium.util.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -94,48 +93,55 @@ public class SwordRenderer extends GeoItemRenderer<PartiumSwordItem> {
                     gripBone.markPositionAsChanged();
                 });
 
-                //TODO: do not crash if not pressent
-                model.getBone("joint_emitter").get().setPivotX(this.gripModel.getBone("joint_emitter").get().getPivotX() + .13f);
-                model.getBone("joint_emitter").get().setPivotY(this.gripModel.getBone("joint_emitter").get().getPivotY() - .13f);
-                model.getBone("joint_emitter").get().setPivotZ(this.gripModel.getBone("joint_emitter").get().getPivotZ() + .5f);
+                this.gripModel.getBone("joint_emitter").ifPresent(emitterJoint -> {
+                    rootModel.getBone("joint_emitter").get().setPivotX(emitterJoint.getPivotX() + .13f);
+                    rootModel.getBone("joint_emitter").get().setPivotY(emitterJoint.getPivotY() - .13f);
+                    rootModel.getBone("joint_emitter").get().setPivotZ(emitterJoint.getPivotZ() + .5f);
 
-                model.getBone("joint_guard").get().setPivotX(this.gripModel.getBone("joint_guard").get().getPivotX() + .13f);
-                model.getBone("joint_guard").get().setPivotY(this.gripModel.getBone("joint_guard").get().getPivotY() - .13f);
-                model.getBone("joint_guard").get().setPivotZ(this.gripModel.getBone("joint_guard").get().getPivotZ() + .5f);
+                    rootModel.getBone("joint_emitter").get().setRotX(emitterJoint.getRotX());
+                    rootModel.getBone("joint_emitter").get().setRotY(emitterJoint.getRotY());
+                    rootModel.getBone("joint_emitter").get().setRotZ(emitterJoint.getRotZ());
 
-                model.getBone("joint_pommel").get().setPivotX(this.gripModel.getBone("joint_pommel").get().getPivotX() + .13f);
-                model.getBone("joint_pommel").get().setPivotY(this.gripModel.getBone("joint_pommel").get().getPivotY() - .13f);
-                model.getBone("joint_pommel").get().setPivotZ(this.gripModel.getBone("joint_pommel").get().getPivotZ() + .5f);
+                });
 
-                model.getBone("joint_emitter").get().setRotX(this.gripModel.getBone("joint_emitter").get().getRotX());
-                model.getBone("joint_emitter").get().setRotY(this.gripModel.getBone("joint_emitter").get().getRotY());
-                model.getBone("joint_emitter").get().setRotZ(this.gripModel.getBone("joint_emitter").get().getRotZ());
+                this.gripModel.getBone("joint_guard").ifPresent(guardJoint -> {
+                    rootModel.getBone("joint_guard").get().setPivotX(guardJoint.getPivotX() + .13f);
+                    rootModel.getBone("joint_guard").get().setPivotY(guardJoint.getPivotY() - .13f);
+                    rootModel.getBone("joint_guard").get().setPivotZ(guardJoint.getPivotZ() + .5f);
 
-//                model.getBone("joint_blade").get().setRotX(this.gripModel.getBone("joint_blade").get().getRotX());
-//                model.getBone("joint_blade").get().setRotY(this.gripModel.getBone("joint_blade").get().getRotY());
-//                model.getBone("joint_blade").get().setRotZ(this.gripModel.getBone("joint_blade").get().getRotZ());
+                    rootModel.getBone("joint_guard").get().setRotX(guardJoint.getRotX());
+                    rootModel.getBone("joint_guard").get().setRotY(guardJoint.getRotY());
+                    rootModel.getBone("joint_guard").get().setRotZ(guardJoint.getRotZ());
+                });
 
-                model.getBone("joint_pommel").get().setRotX(this.gripModel.getBone("joint_pommel").get().getRotX());
-                model.getBone("joint_pommel").get().setRotY(this.gripModel.getBone("joint_pommel").get().getRotY());
-                model.getBone("joint_pommel").get().setRotZ(this.gripModel.getBone("joint_pommel").get().getRotZ());
+                this.gripModel.getBone("joint_pommel").ifPresent((pommelJoint) -> {
+                    rootModel.getBone("joint_pommel").get().setPivotX(pommelJoint.getPivotX() + .13f);
+                    rootModel.getBone("joint_pommel").get().setPivotY(pommelJoint.getPivotY() - .13f);
+                    rootModel.getBone("joint_pommel").get().setPivotZ(pommelJoint.getPivotZ() + .5f);
+
+                    rootModel.getBone("joint_pommel").get().setRotX(pommelJoint.getRotX());
+                    rootModel.getBone("joint_pommel").get().setRotY(pommelJoint.getRotY());
+                    rootModel.getBone("joint_pommel").get().setRotZ(pommelJoint.getRotZ());
+
+                });
             }
 
             //TODO: convert to simple class
             if (this.bladeRenderLayer.getBlades() != bladesData) {
                 this.bladeRenderLayer.setBlades(bladesData);
             }
-            if (shouldRender(emitterData.model(), this.emitterRenderLayer.getModel())) {
-                this.emitterRenderLayer.setModel(emitterData.model());
+            if (shouldRender(emitterData.model(), this.emitterRenderLayer.getResource())) {
+                this.emitterRenderLayer.setResource(emitterData.model());
                 this.emitterRenderLayer.setScale(emitterData.scale());
                 this.emitterRenderLayer.setRetry(true);
             }
-            if (shouldRender(guardData.model(), this.guardRenderLayer.getModel())) {
-                this.guardRenderLayer.setModel(guardData.model());
+            if (shouldRender(guardData.model(), this.guardRenderLayer.getResource())) {
+                this.guardRenderLayer.setResource(guardData.model());
                 this.guardRenderLayer.setScale(guardData.scale());
                 this.guardRenderLayer.setRetry(true);
             }
-            if (shouldRender(pommelData.model(), this.pommelRenderLayer.getModel())) {
-                this.pommelRenderLayer.setModel(pommelData.model());
+            if (shouldRender(pommelData.model(), this.pommelRenderLayer.getResource())) {
+                this.pommelRenderLayer.setResource(pommelData.model());
                 this.pommelRenderLayer.setScale(pommelData.scale());
                 this.pommelRenderLayer.setRetry(true);
             }
@@ -177,6 +183,9 @@ public class SwordRenderer extends GeoItemRenderer<PartiumSwordItem> {
     }
     public void setBladeEmitterLocation(Vector3f location){
         bladeRenderLayer.setEmitterLocation(location);
+    }
+    public Vector3f getBladeEmitterLocation(){
+        return bladeRenderLayer.getEmitterLocation();
     }
     public void setBladeParentScale(float scale){
         bladeRenderLayer.setParentScale(scale);

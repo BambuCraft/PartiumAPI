@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import de.abq.partium.Partium;
 import de.abq.partium.common.data_components.parts.BladePart;
 import de.abq.partium.common.item.PartiumSwordItem;
+import de.abq.partium.util.CheckedResourceLocation;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.Tuple;
@@ -58,9 +59,13 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
                 bufferSource = blade.getA();
                 poseStack = blade.getB();
             } else {
-                setModel(bladeData.model());
-                setJointName("blade"); /*ADDED LATER*/
-                super.renderModel(poseStack, animatable, bone, renderType, bufferSource, buffer, partialTick, packedLight, packedOverlay);
+                var a = CheckedResourceLocation.exists(bladeData.model());
+                Partium.LOG.info("should render blade {} @ {} ? {}",bladeData.model(), blade_joint.getName(),a );
+
+                setScale(bladeData.scale());
+                setResource(bladeData.model());
+                setRetryWholeDraw(true);
+                super.renderForBone(poseStack, animatable, blade_joint, renderType, bufferSource, buffer, partialTick, packedLight, packedOverlay);
             }
         }
         setBones(new ArrayList<>());
