@@ -24,11 +24,11 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class ModelRenderLayer<T extends GeoAnimatable> extends GeoRenderLayer<T> {
-    private ResourceLocation resource;
-    private float scale;
+    ResourceLocation resource;
+    float scale;
     protected float parentScale;
     private String joint_name;
-    private boolean retryWholeDraw = true;
+    boolean retryWholeDraw = true;
     private boolean retryTextureDraw = true;
     private boolean isGUIRender = false;
 
@@ -86,37 +86,6 @@ public class ModelRenderLayer<T extends GeoAnimatable> extends GeoRenderLayer<T>
                 if (bakedGeoModel.getBone("joint_blade").isPresent() && !isGUIRender)
                     sendBladeJoints(translate, bakedGeoModel.getBone("joint_blade").get());
 
-            } else if (bone.getParent() != null && bone.getParent().getName().equals("joint_blade")) {
-
-                SwordRenderer swordRenderer = ((SwordRenderer) this.getRenderer());
-                Vector3f translate = swordRenderer.getBladeEmitterLocation();
-                translate.add( new Vector3f(
-                        bone.getPivotX(),
-                        bone.getPivotY(),
-                        bone.getPivotZ())
-                );
-
-                DynamicItemModel<T> dynModel = new DynamicItemModel<>(resource);
-                ResourceLocation dynResource = dynModel.getModelResource(animatable);
-                if (!CheckedResourceLocation.exists(dynResource)) return;
-                BakedGeoModel bakedGeoModel = dynModel.getBakedModel(dynResource);
-
-                poseStack.pushPose();
-                poseStack.translate(
-                        translate.x/16.0,
-                        translate.y/16.0,
-                        translate.z/16.0
-                );
-
-                poseStack.scale(scale, scale, scale);
-                poseStack.rotateAround(new Quaternionf().rotationXYZ(bone.getRotX(), bone.getRotY(), bone.getRotZ()), bone.getPivotX(), bone.getPivotY(), bone.getPivotZ());
-
-                if (CheckedResourceLocation.exists(dynModel.getTextureResource(animatable))) {
-                    renderType = RenderType.entityTranslucent(dynModel.getTextureResource(animatable));
-                }
-
-                this.getRenderer().reRender(bakedGeoModel, poseStack, bufferSource, animatable, renderType, bufferSource.getBuffer(renderType), partialTick, packedLight, packedOverlay, Color.WHITE.argbInt());
-                poseStack.popPose();
             }
         }
     }
