@@ -7,8 +7,10 @@ import de.abq.partium.client.model.DynamicItemModel;
 import de.abq.partium.common.item.PartiumAxeItem;
 import de.abq.partium.util.CheckedResourceLocation;
 import de.abq.partium.util.Util;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -51,9 +53,23 @@ public class ModelRenderLayer<T extends GeoAnimatable> extends GeoRenderLayer<T>
         if (retryWholeDraw && resource != Util.EMPTY_RESOURCE_LOCATION && !Objects.equals(resource, ResourceLocation.fromNamespaceAndPath("minecraft", ""))) {
             if (bone.getName().equals("joint_"+joint_name)) {
 
-                DynamicItemModel<T> dynModel = new DynamicItemModel<>(resource);
+                if (!Partium.known_models.containsKey(resource)) {
+                    DynamicItemModel<T> tmpModel = new DynamicItemModel<>(resource);
+                    Partium.known_models.put(resource, tmpModel);
+                }
+                if (Partium.known_models.get(resource) == null) return;
+
+                DynamicItemModel<T> dynModel = (DynamicItemModel<T>) Partium.known_models.get(resource);
                 ResourceLocation dynResource = dynModel.getModelResource(animatable);
-                if (!CheckedResourceLocation.exists(dynResource)) return;
+
+                if (!CheckedResourceLocation.exists(dynResource)) {
+                    //TODO: make configurable
+                    if (Partium.known_models.get(resource) != null) {
+                        Minecraft.getInstance().player.sendSystemMessage(Component.literal("[WARNING] "+ dynResource + " is not available, you mite need the correct resourcepack to use this part"));
+                        Partium.known_models.replace(resource, null);
+                    }
+                    return;
+                }
 
                 BakedGeoModel bakedGeoModel = dynModel.getBakedModel(dynResource);
                 Optional<GeoBone> additionalBoneOpt = bakedGeoModel.getBone(joint_name);

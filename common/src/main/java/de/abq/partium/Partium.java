@@ -1,6 +1,7 @@
 package de.abq.partium;
 
 import com.mojang.authlib.minecraft.client.MinecraftClient;
+import de.abq.partium.client.model.DynamicItemModel;
 import de.abq.partium.common.item.PartiumSwordItem;
 import foundry.veil.api.client.render.VeilRenderSystem;
 import foundry.veil.api.client.render.VeilRenderer;
@@ -19,10 +20,15 @@ import net.minecraft.world.item.SwordItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
+import java.util.List;
+
 public class Partium {
     public static final String MOD_ID = "partium";
     public static final String MOD_NAME = "PartiumAPI";
     public static final Logger LOG = LoggerFactory.getLogger(MOD_NAME);
+
+    public static HashMap<ResourceLocation, DynamicItemModel<?>> known_models = new HashMap<>();
 
     public static void init() {}
 

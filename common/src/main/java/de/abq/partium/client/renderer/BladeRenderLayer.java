@@ -8,8 +8,10 @@ import de.abq.partium.common.data_components.parts.BladePart;
 import de.abq.partium.common.item.PartiumSwordItem;
 import de.abq.partium.util.CheckedResourceLocation;
 import de.abq.partium.util.Util;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Tuple;
 import org.joml.Quaternionf;
@@ -62,9 +64,6 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
                 bufferSource = blade.getA();
                 poseStack = blade.getB();
             } else {
-                var a = CheckedResourceLocation.exists(bladeData.model());
-                Partium.LOG.info("should render blade {} @ {} ? {}",bladeData.model(), blade_joint.getName(),a );
-
                 setScale(bladeData.scale());
                 setResource(bladeData.model());
                 setRetryWholeDraw(true);
@@ -88,9 +87,24 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
                 bone.getPivotZ())
         );
 
-        DynamicItemModel<PartiumSwordItem> dynModel = new DynamicItemModel<>(resource);
+        if (!Partium.known_models.containsKey(resource)) {
+            DynamicItemModel<PartiumSwordItem> tmpModel = new DynamicItemModel<>(resource);
+            Partium.known_models.put(resource, tmpModel);
+        }
+        if (Partium.known_models.get(resource) == null) return;
+
+        DynamicItemModel<PartiumSwordItem> dynModel = (DynamicItemModel<PartiumSwordItem>) Partium.known_models.get(resource);
         ResourceLocation dynResource = dynModel.getModelResource(animatable);
-        if (!CheckedResourceLocation.exists(dynResource)) return;
+
+        if (!CheckedResourceLocation.exists(dynResource)) {
+            //TODO: make configurable
+            if (Partium.known_models.get(resource) != null) {
+                Minecraft.getInstance().player.sendSystemMessage(Component.literal("[WARNING] "+ dynResource + " is not available, you mite need the correct resourcepack to use this part"));
+                Partium.known_models.replace(resource, null);
+            }
+            return;
+        }
+
         BakedGeoModel bakedGeoModel = dynModel.getBakedModel(dynResource);
 
         poseStack.pushPose();
