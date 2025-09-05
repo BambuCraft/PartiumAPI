@@ -31,7 +31,7 @@ public class SwordRenderer extends GeoItemRenderer<PartiumSwordItem> {
     private final ModelRenderLayer<PartiumSwordItem> pommelRenderLayer = new ModelRenderLayer<>(this, "pommel");
     private final ModelRenderLayer<PartiumSwordItem> guardRenderLayer = new ModelRenderLayer<>(this, "guard");
 
-    public static final String ANCHOR_ROOT = "bb_main";
+    public static final String ANCHOR_ROOT = "grip";
 
     private BakedGeoModel gripModel = null;
     private boolean gripChange = true;
