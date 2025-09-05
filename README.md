@@ -9,9 +9,7 @@ You can also add your own Models, Texture and Animations.
 
 
 
----
-
-````### Table of Contents
+### Table of Contents
 1. [How to use](#how-to-use)
 2. [Dependencies](#requirments)
 3. [Why?](#why)
