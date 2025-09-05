@@ -1,3 +1,5 @@
+![PartiumAPI Logo](https://cdn.modrinth.com/data/cached_images/764cd8a630de5ff8c63c2793b3c135d2ae679871.png)
+
 # Build Swords How **you** imagine them
 
 ### About
