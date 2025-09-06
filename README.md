@@ -74,7 +74,7 @@ All branches with a version number should be buildable, the wip branch will have
 
 ### Why?
 Don't you miss your childhood memories, you made with the [Fisk's Advanced Lighsabers Mod](https://www.curseforge.com/minecraft/mc-mods/advanced-lightsabers) and want to bring them back? I do and so I decided to make this mod. It utilizes the power of [Geckolib](https://modrinth.com/mod/geckolib) and [Veil](https://github.com/FoundryMC/Veil) to create cool looking Swords and Lightsabers.
-````
+
 
 #### References:
 - https://github.com/birsy/clinker-mod/
