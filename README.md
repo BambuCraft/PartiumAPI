@@ -23,44 +23,6 @@ The following command should explain everything there is to know, colors are in 
 Specifying a color when using a blade model is currently unimplemented. 
 Further knowladge can be obtained in the [wiki](https://github.com/BambuCraft/PartiumAPI/wiki)
 
-```json5
-/give @p partium:sword[
-	partium:parts = {
-	"blades":
-		{"primary":
-			{ "length":13.0, "innerColor": "#ffffff", "outerColor": "#44aaff", 
-			  "model":""} ,
-		"secondary":
-			{ "length":0.5, "innerColor": "#ffffff", "outerColor": "#44aaff",
-			  "model":"" },
-		"tertiary":
-			{ "length":0.25, "innerColor": "#ffffff", "outerColor": "#44aaff",
-			  "model":"" }
-		},
-	"emitter":{
-		"model": "addon_pack:my_awesome_emitter", "scale": 1.0
-	},
-	"guard":{
-		"model": "addon_pack:my_awesome_guard", "scale": 1.1
-	},
-	"grip":{
-		"model": "addon_pack:my_awesome_grip", "scale": 1.0
-	},
-	"pommel":{
-		"model": "addon_pack:my_awesome_pommel", "scale": 0.3
-	}
-}]
-
-
-//Test components contained in the mod
-/give @p partium:sword[partium:parts={"grip":{"model":"partium:test_grip"},"pommel":{"model":"partium:test_pommel", "scale":0.75f},"emitter":{"model":"partium:test_emitter", "scale":0.75f},"guard":{"model":"partium:test_guard", "scale":0.75f}}]
-/give @p partium:sword[partium:parts={"blades": {"primary":{ "length":13.0, "innerColor": "#ffffff", "outerColor": "#44aaff", "model":""}},"grip":{"model":"partium:test_grip"},"pommel":{"model":"partium:test_pommel", "scale":0.75f},"emitter":{"model":"partium:test_emitter", "scale":0.75f},"guard":{"model":"partium:test_guard", "scale":0.75f}}]
-	
-```
-
-### Usage in Mod:
-    implement the IPartiumItem interface, add the right partium component to your item.
-    ??You can also extend the renderer if you need anything more
 
 ### Repo strucure
 All branches with a version number should be buildable, the wip branch will have the latest changes, but there is no guarantie it will compile.
