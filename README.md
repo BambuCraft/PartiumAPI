@@ -9,9 +9,7 @@ You can also add your own Models, Texture and Animations.
 
 
 
----
-
-````### Table of Contents
+### Table of Contents
 1. [How to use](#how-to-use)
 2. [Dependencies](#requirments)
 3. [Why?](#why)
@@ -68,15 +66,17 @@ Further knowladge can be obtained in the [wiki](https://github.com/BambuCraft/Pa
 All branches with a version number should be buildable, the wip branch will have the latest changes, but there is no guarantie it will compile.
 
 ### Future Features
-- better combat implementation
-
+- [ ] better combat implementation
+- [ ] Implement in Mod (needs maven repo)
+- [ ] Fix lightsaber effect
+- [ ] Handle Animations
 
 </br>
 </br>
 
 ### Why?
-Don't you miss your childhood memories, you made with the [Fisk's Advanced Lighsabers Mod](https://www.curseforge.com/minecraft/mc-mods/advanced-lightsabers) and want to bring them back? I do and so I decided to make this mod. It utilizes the power of [Geckolib](https://modrinth.com/mod/geckolib) and [Veil](https://github.com/FoundryMC/Veil) to create cool looking Swords and Lightsabers.
-````
+Don't you miss your childhood memories you made with the [Fisk's Advanced Lighsabers Mod](https://www.curseforge.com/minecraft/mc-mods/advanced-lightsabers) and want to bring them back? I do and so I decided to make this mod. It utilizes the power of [Geckolib](https://modrinth.com/mod/geckolib) and [Veil](https://github.com/FoundryMC/Veil) to create cool looking Swords and Lightsabers.
+
 
 #### References:
 - https://github.com/birsy/clinker-mod/
