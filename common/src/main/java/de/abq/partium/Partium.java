@@ -1,27 +1,21 @@
 package de.abq.partium;
 
-import com.mojang.authlib.minecraft.client.MinecraftClient;
 import de.abq.partium.client.model.DynamicItemModel;
 import de.abq.partium.common.item.PartiumSwordItem;
 import foundry.veil.api.client.render.VeilRenderSystem;
-import foundry.veil.api.client.render.VeilRenderer;
 import foundry.veil.api.client.render.post.PostPipeline;
 import foundry.veil.api.client.render.post.PostProcessingManager;
-import foundry.veil.api.client.render.shader.ShaderPreDefinitions;
 import foundry.veil.api.event.VeilRenderLevelStageEvent;
 import foundry.veil.platform.VeilEventPlatform;
-import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.SwordItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class Partium {
     public static final String MOD_ID = "partium";
@@ -38,8 +32,12 @@ public class Partium {
 
     public static final ResourceLocation LIGHTSABER_POST_SHADER = Partium.path("lightsaber_post");
 
-    //BROKEN: Run to enable lightsaber effects
     public static void commonClientSetup(){
+        //Partium.commonVeilSetup();
+    }
+
+    //BROKEN: Run to enable lightsaber effects
+    public static void commonVeilSetup(){
         VeilEventPlatform.INSTANCE.onVeilRenderLevelStage((stage, levelRenderer, bufferSource, poseStack, projectionMatrix, renderTick, partialTicks, deltaTracker,camera, frustum) -> {
             if (stage == VeilRenderLevelStageEvent.Stage.AFTER_LEVEL){
                 Minecraft instance = Minecraft.getInstance();

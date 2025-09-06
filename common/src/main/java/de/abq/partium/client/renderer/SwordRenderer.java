@@ -22,16 +22,19 @@ import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.model.DefaultedItemGeoModel;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
 
+import java.io.Console;
 import java.util.Map;
 import java.util.Optional;
 
 public class SwordRenderer extends GeoItemRenderer<PartiumSwordItem> {
+    public static boolean isReloading = false;
+
     private final BladeRenderLayer bladeRenderLayer = new BladeRenderLayer(this);
     private final ModelRenderLayer<PartiumSwordItem> emitterRenderLayer = new ModelRenderLayer<>(this, "emitter");
     private final ModelRenderLayer<PartiumSwordItem> pommelRenderLayer = new ModelRenderLayer<>(this, "pommel");
     private final ModelRenderLayer<PartiumSwordItem> guardRenderLayer = new ModelRenderLayer<>(this, "guard");
 
-    public static final String ANCHOR_ROOT = "grip";
+    public static final String ANCHOR_ROOT = "bb_main";
 
     private BakedGeoModel gripModel = null;
     private boolean gripChange = true;
@@ -49,6 +52,7 @@ public class SwordRenderer extends GeoItemRenderer<PartiumSwordItem> {
 
     @Override
     public void renderByItem(ItemStack stack, ItemDisplayContext transformType, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
+        if (isReloading) return;
         this.animatable = (PartiumSwordItem) stack.getItem();
         this.currentItemStack = stack;
         this.renderPerspective = transformType;
@@ -74,14 +78,14 @@ public class SwordRenderer extends GeoItemRenderer<PartiumSwordItem> {
             ModelPart pommelData = parts.pommel();
 
             DynamicItemModel<PartiumSwordItem> localGripModel = new DynamicItemModel<>(gripData.model());
-            if ( CheckedResourceLocation.exists(localGripModel.getModelResource(animatable))) {
+            if ( CheckedResourceLocation.exists(localGripModel.getModelResource(animatable)) ) {
                 this.gripModel = localGripModel.getBakedModel(localGripModel.getModelResource(animatable));
                 BakedGeoModel rootModel = model.getBakedModel(this.model.getModelResource((PartiumSwordItem) stack.getItem()));
                 this.gripChange = false;
                 this.gripModel.getBone(ANCHOR_ROOT).ifPresent(gripBone -> {
                     Optional<GeoBone> rootBone = rootModel.getBone("root");
                     if (rootBone.isEmpty()) {
-                        Partium.LOG.info("No root bone found in {}", this.animatable);
+                        Partium.LOG.warn("No root bone found in {}", this.animatable);
                         return;
                     }
 
@@ -146,7 +150,7 @@ public class SwordRenderer extends GeoItemRenderer<PartiumSwordItem> {
                 this.pommelRenderLayer.setRetry(true);
             }
 
-            if ( CheckedResourceLocation.exists(localGripModel.getModelResource(animatable)) ){
+            if ( CheckedResourceLocation.exists(localGripModel.getModelResource(animatable))){
                 if (CheckedResourceLocation.exists(localGripModel.getTextureResource(animatable))) renderType = RenderType.entityTranslucent(localGripModel.getTextureResource(animatable));
                 this.reRender(this.gripModel, poseStack, bufferSource, animatable, renderType, bufferSource.getBuffer(renderType), partialTick, packedLight, packedOverlay, this.getRenderColor(animatable, partialTick, packedLight).argbInt());
             }

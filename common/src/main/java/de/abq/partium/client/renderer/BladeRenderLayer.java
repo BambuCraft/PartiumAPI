@@ -84,8 +84,8 @@ public class BladeRenderLayer extends ModelRenderLayer<PartiumSwordItem>{
         translate.add(new Vector3f(
                 bone.getPivotX(),
                 bone.getPivotY(),
-                bone.getPivotZ())
-        );
+                bone.getPivotZ()
+        ));
 
         if (!Partium.known_models.containsKey(resource)) {
             DynamicItemModel<PartiumSwordItem> tmpModel = new DynamicItemModel<>(resource);
