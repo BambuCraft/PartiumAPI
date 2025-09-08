@@ -25,8 +25,7 @@ public class ZItems {
 
     public static final Item SWORD = build("sword", new PartiumSwordItem(Tiers.NETHERITE, DEFAULT_PROPERTIES));
 
-    //UNIMPLEMENTED
-    /*
+    /*UNIMPLEMENTED
     public static final Item PICKAXE = build("pickaxe", new PartiumPickaxeItem(Tiers.NETHERITE, DEFAULT_PROPERTIES));
     public static final Item AXE = build("axe", new PartiumAxeItem(Tiers.NETHERITE, DEFAULT_PROPERTIES));
     public static final Item HOE = build("hoe", new PartiumHoeItem(Tiers.NETHERITE, DEFAULT_PROPERTIES));
@@ -47,8 +46,7 @@ public class ZItems {
     public static void registerItems(BiConsumer<Item, ResourceLocation> register) {
         register.accept(SWORD, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "sword"));
 
-        //UNIMPLEMENTED
-        /*
+        /*UNIMPLEMENTED
          register.accept(PICKAXE, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "pickaxe"));
          register.accept(AXE, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "axe"));
          register.accept(HOE, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "hoe"));
