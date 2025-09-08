@@ -12,7 +12,7 @@ import net.minecraft.world.level.material.MapColor;
 
 import java.util.function.BiConsumer;
 
-public class ZSBlocks {
+public class ZBlocks {
 
     public static final Block swordPartBuilderBlock = new PartBuilderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(3).noOcclusion());
     public static final ResourceLocation SWORD_PART_BUILDER = ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "sword_part_builder.png");

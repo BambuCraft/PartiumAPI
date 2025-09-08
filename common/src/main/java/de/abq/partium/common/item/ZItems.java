@@ -6,11 +6,14 @@ import de.abq.partium.common.data_components.PartsComponents;
 import de.abq.partium.platform.Services;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
+
+@ApiStatus.Internal
 public class ZItems {
 
     private static final Map<ResourceLocation, Item> ITEMS = new LinkedHashMap<>();
