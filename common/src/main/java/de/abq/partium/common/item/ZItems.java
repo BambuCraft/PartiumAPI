@@ -5,7 +5,9 @@ import de.abq.partium.common.data_components.PartiumDataComponents;
 import de.abq.partium.common.data_components.PartsComponents;
 import de.abq.partium.platform.Services;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.Tiers;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.LinkedHashMap;
@@ -18,11 +20,12 @@ public class ZItems {
 
     private static final Map<ResourceLocation, Item> ITEMS = new LinkedHashMap<>();
 
+    //TODO: automatically add Partium Components
     private static final Item.Properties DEFAULT_PROPERTIES = Services.PLATFORM.defaultItemBuilder().rarity(Rarity.EPIC).stacksTo(1).component(PartiumDataComponents.SWORD_PARTS, PartsComponents.DEFAULT);
 
     public static final Item SWORD = build("sword", new PartiumSwordItem(Tiers.NETHERITE, DEFAULT_PROPERTIES));
 
-    // Not Working
+    //UNIMPLEMENTED
     /*
     public static final Item PICKAXE = build("pickaxe", new PartiumPickaxeItem(Tiers.NETHERITE, DEFAULT_PROPERTIES));
     public static final Item AXE = build("axe", new PartiumAxeItem(Tiers.NETHERITE, DEFAULT_PROPERTIES));
@@ -44,7 +47,7 @@ public class ZItems {
     public static void registerItems(BiConsumer<Item, ResourceLocation> register) {
         register.accept(SWORD, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "sword"));
 
-        //NEEDS WORK
+        //UNIMPLEMENTED
         /*
          register.accept(PICKAXE, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "pickaxe"));
          register.accept(AXE, ResourceLocation.fromNamespaceAndPath(Partium.MOD_ID, "axe"));
