@@ -21,7 +21,7 @@ public record BladesPartComponent(){
         public static final Blade DEFAULT = new Blade(1, Util.EMPTY_RESOURCE_LOCATION, PlasmaBlade.DEFAULT);
 
         public static final Codec<Blade> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                Codec.FLOAT.optionalFieldOf("scale", 8f).forGetter(Blade::scale),
+                Codec.FLOAT.optionalFieldOf("scale", 0.5f).forGetter(Blade::scale),
                 ResourceLocation.CODEC.fieldOf("model").forGetter(Blade::model),
                 PlasmaBlade.CODEC.optionalFieldOf("plasmaBlade", PlasmaBlade.DEFAULT).forGetter(Blade::plasmaBlade)
              ).apply(instance, Blade::new)
