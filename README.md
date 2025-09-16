@@ -28,7 +28,7 @@ All branches with a version number should be buildable, the wip branch will have
 
 ### Future Features
 - [ ] better combat implementation
-- [x] Implement in Mod (better maven repo)
+- [ ] Implement in Mod (better maven repo)
 - [ ] Fix lightsaber effect
 - [ ] Handle Animations
 - [ ] Abbility to rotate the grip
