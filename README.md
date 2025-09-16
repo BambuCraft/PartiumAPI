@@ -6,7 +6,7 @@
 This mod is a mod for building custom Swords and Lightsabers out of different parts you can craft.
 <br/>
 You can also add your own Models, Texture and Animations.
-
+The mod is available on Modrinth () and in the future also on Curseforge
 
 
 ### Table of Contents
@@ -28,9 +28,11 @@ All branches with a version number should be buildable, the wip branch will have
 
 ### Future Features
 - [ ] better combat implementation
-- [ ] Implement in Mod (needs maven repo)
+- [x] Implement in Mod (better maven repo)
 - [ ] Fix lightsaber effect
 - [ ] Handle Animations
+- [ ] Abbility to rotate the grip
+- [ ] gameplay option for combining parts (Parts Station)
 
 </br>
 </br>
