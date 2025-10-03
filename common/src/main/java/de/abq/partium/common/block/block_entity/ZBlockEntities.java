@@ -1,6 +1,6 @@
 package de.abq.partium.common.block.block_entity;
 
-import de.abq.partium.common.block.ZSBlocks;
+import de.abq.partium.common.block.ZBlocks;
 import de.abq.partium.platform.Services;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -17,7 +17,7 @@ import java.util.function.BiFunction;
 public class ZBlockEntities {
     private static final Map<ResourceLocation, BlockEntityType<?>> ALL = new HashMap<>();
 
-    public static final BlockEntityType<PartBuilderBlockEntity> SWORD_PART_BUILDER_BLOCK_ENTITY = assign(ZSBlocks.SWORD_PART_BUILDER, PartBuilderBlockEntity::new, ZSBlocks.swordPartBuilderBlock);
+    public static final BlockEntityType<PartBuilderBlockEntity> SWORD_PART_BUILDER_BLOCK_ENTITY = assign(ZBlocks.SWORD_PART_BUILDER, PartBuilderBlockEntity::new, ZBlocks.swordPartBuilderBlock);
 
     private static <T extends BlockEntity> BlockEntityType<T> assign(ResourceLocation id, BiFunction<BlockPos, BlockState, T> fn, Block... blocks){
         var ret = Services.PLATFORM.createBlockEntityType(fn, blocks);

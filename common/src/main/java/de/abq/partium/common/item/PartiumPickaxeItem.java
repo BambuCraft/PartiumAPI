@@ -10,6 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.ApiStatus;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 import software.bernie.geckolib.animatable.client.GeoRenderProvider;
@@ -20,6 +21,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.function.Consumer;
 
+@ApiStatus.Internal
 public class PartiumPickaxeItem extends PickaxeItem implements GeoItem {
     private static final RawAnimation ACTIVATE_ANIM = RawAnimation.begin().thenPlay("use.activate");
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);

@@ -2,11 +2,18 @@ package de.abq.partium;
 
 import de.abq.partium.common.data_components.PartiumDataComponents;
 import de.abq.partium.common.item.ZItems;
+import de.abq.partium.event.ReloadListener;
+import foundry.veil.fabric.util.FabricReloadListener;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackType;
 import net.minecraft.world.item.Item;
 
 import java.util.function.BiConsumer;
@@ -19,10 +26,16 @@ public class PartiumFabric implements ModInitializer {
     public void onInitialize() {
         Partium.init();
 
-
         bindItems( ZItems::registerItems );
         bindDataComponents( PartiumDataComponents::register );
-
+        FabricLoader.getInstance().getModContainer(Partium.MOD_ID).ifPresent(container -> {
+            ResourceManagerHelper.registerBuiltinResourcePack(
+                    Partium.path("test_resources"),
+                    container,
+                    Component.translatable("resourcePack.partium.test_resources.name"),
+                    ResourcePackActivationType.NORMAL);
+        });
+        ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(new FabricReloadListener(Partium.path("resources"), new ReloadListener()));
     }
 
     private void bindItems(Consumer<BiConsumer<Item, ResourceLocation>> source){
