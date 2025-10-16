@@ -33,10 +33,9 @@ public class Partium {
     public static final ResourceLocation LIGHTSABER_POST_SHADER = Partium.path("lightsaber_post");
 
     public static void commonClientSetup(){
-        //Partium.commonVeilSetup();
+        Partium.commonVeilSetup(); //remove to disable lightsaber effects
     }
 
-    //BROKEN: Run to enable lightsaber effects
     public static void commonVeilSetup(){
         VeilEventPlatform.INSTANCE.onVeilRenderLevelStage((stage, levelRenderer, bufferSource, poseStack, projectionMatrix, renderTick, partialTicks, deltaTracker,camera, frustum) -> {
             if (stage == VeilRenderLevelStageEvent.Stage.AFTER_LEVEL){
